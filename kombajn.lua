@@ -28,5 +28,6 @@ local curses = require('curses')
 local unistd = require('unistd')
 
 curses.initscr()
+curses.cbreak()
 unistd.sleep(10)
 curses.endwin()
