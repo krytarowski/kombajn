@@ -41,7 +41,7 @@ static void
 create_argv_table(lua_State *L)
 {
 	int mib[4];
-	size_t nargv;
+	size_t argvlen;
 	char *buffer;
 	size_t i, len;
 	char *arg;
@@ -51,27 +51,26 @@ create_argv_table(lua_State *L)
 	mib[2] = getpid();
 	mib[3] = KERN_PROC_ARGV;
 
-	if (sysctl(mib, 4, NULL, &nargv, NULL, 0) == -1)
-		luaL_error(L, "sysctl KERN_PROC_NARGV errno=%d", errno);
+	if (sysctl(mib, 4, NULL, &argvlen, NULL, 0) == -1)
+		luaL_error(L, "sysctl KERN_PROC_ARGV errno=%d", errno);
 
-	buffer = malloc(nargv);
-	if (buffer == NULL)
-		luaL_error(L, "malloc");
+	buffer = lua_newuserdata(L, argvlen);
 
-	if (sysctl(mib, 4, buffer, &nargv, NULL, 0) == -1)
+	if (sysctl(mib, 4, buffer, &argvlen, NULL, 0) == -1)
 		luaL_error(L, "sysctl KERN_PROC_ARGV errno=%d", errno);
 
 	arg = buffer;
 	i = 1;
 	lua_newtable(L);
-	while (buffer + nargv > arg) {
+	while (buffer + argvlen > arg) {
 		len = strlen(arg);
 		lua_pushlstring(L, arg, len);
 		lua_rawseti(L, -2, i++);
 		arg += len + 1;
 	}
 
-	free(buffer);
+	/* Free the userdata buffer */
+	lua_remove(L, -2);
 }
 
 LUALIB_API int
