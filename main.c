@@ -33,7 +33,7 @@
 #include <stdlib.h>
 
 #ifndef KOMBAJNDIR
-#define KOMBAJNDIR ""
+#define KOMBAJNDIR "./"
 #endif
 
 #define _PATH_KOMBAJN	KOMBAJNDIR "kombajn.lua"
@@ -49,6 +49,19 @@ main(int argc, char **argv)
 		err(EXIT_FAILURE, "luaL_newstate");
 
 	luaL_openlibs(L);
+
+	lua_getglobal(L, "package");
+	/* stack: table:package */
+	lua_getfield(L, -1, "cpath");
+	/* stack: table:package string:cpath */
+	lua_pushstring(L, ";" KOMBAJNDIR "modules/?/?.so");
+	/* stack: table:package string:cpath string:';./modules/?/?.so' */
+	lua_concat(L, 2);
+	/* stack: table:package string:cpath */
+	lua_setfield(L, -2, "cpath");
+	/* stack: table:package */
+	lua_pop(L, 1);
+	/* stack: */
 
 	if ((rv = luaL_loadfile(L, _PATH_KOMBAJN)) != LUA_OK)
 		errx(EXIT_FAILURE, "luaL_loadfile error (%d): %s", rv,
