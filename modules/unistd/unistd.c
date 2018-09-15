@@ -36,11 +36,20 @@ l_sleep(lua_State *L) /* [-1, +1, -] */
 {
 	int seconds;
 
-	seconds = lua_tonumber(L, -1);
+	/* stack: integer:seconds */
+	seconds = lua_tointeger(L, -1);
+	/* stack: integer:seconds */
+	lua_pop(L, 1);
+	/* stack: */
 
+	/*
+	 * A non-zero return value indicates signal
+	 * interruption and the number unslept seconds.
+	 */
 	seconds = sleep(seconds);
 
-	lua_pushnumber(L, seconds);
+	lua_pushinteger(L, seconds);
+	/* stack: integer:seconds */
 
 	return 1;
 }
