@@ -54,7 +54,7 @@ l_sleep(lua_State *L) /* [-1, +1, v] */
 	return 1;
 }
 
-int
+LUALIB_API int
 luaopen_unistd(lua_State *L)
 {
 	luaL_Reg fns[] = {
