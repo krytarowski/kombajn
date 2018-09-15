@@ -36,18 +36,15 @@ l_sleep(lua_State *L) /* [-1, +1, v] */
 {
 	int seconds;
 
-	/* stack: integer:seconds */
 	seconds = luaL_checkinteger(L, 1);
-	/* stack: integer:seconds */
 
 	/*
 	 * A non-zero return value indicates signal
-	 * interruption and the number unslept seconds.
+	 * interruption and the number of unslept seconds.
 	 */
 	seconds = sleep(seconds);
 
 	lua_pushinteger(L, seconds);
-	/* stack: integer:seconds integer:seconds */
 
 	return 1;
 }
