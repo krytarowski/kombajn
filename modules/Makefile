@@ -1,5 +1,6 @@
 #	$NetBSD$
 
+SUBDIR+=	args
 SUBDIR+=	curses
 SUBDIR+=	unistd
 
