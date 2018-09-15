@@ -32,7 +32,7 @@
 #include <unistd.h>
 
 int
-l_sleep(lua_State *L) /* [-1, +1, -] */
+l_sleep(lua_State *L) /* [-1, +1, v] */
 {
 	int seconds;
 
