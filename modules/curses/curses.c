@@ -110,6 +110,32 @@ l_nocbreak(lua_State *L) /* [-0, +0, v] */
 }
 
 int
+l_echo(lua_State *L) /* [-0, +0, v] */
+{
+	int rv;
+
+	rv = echo();
+
+	if (rv != OK)
+		luaL_error(L, "echo()");
+
+	return 0;
+}
+
+int
+l_noecho(lua_State *L) /* [-0, +0, v] */
+{
+	int rv;
+
+	rv = noecho();
+
+	if (rv != OK)
+		luaL_error(L, "noecho()");
+
+	return 0;
+}
+
+int
 l_raw(lua_State *L) /* [-0, +0, v] */
 {
 	int rv;
@@ -131,6 +157,25 @@ l_noraw(lua_State *L) /* [-0, +0, v] */
 
 	if (rv != OK)
 		luaL_error(L, "noraw()");
+
+	return 0;
+}
+
+int
+l_keypad(lua_State *L) /* [-2, +0, v] */
+{
+	struct lud_WINDOW *uw;
+	int flag;
+	int rv;
+
+	/* stack: userdata:uw boolean */
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+	flag = lua_toboolean(L, 2);
+
+	rv = keypad(uw->win, flag);
+
+	if (rv != OK)
+		luaL_error(L, "keypad()");
 
 	return 0;
 }
@@ -275,8 +320,11 @@ luaopen_curses(lua_State *L)
 		{"endwin",	l_endwin},
 		{"cbreak",	l_cbreak},
 		{"nocbreak",	l_nocbreak},
+		{"echo",	l_echo},
+		{"noecho",	l_noecho},
 		{"raw",		l_raw},
 		{"noraw",	l_noraw},
+		{"keypad",	l_keypad},
 		{"start_color",	l_start_color},
 		{"newwin",	l_newwin},
 		{NULL,		NULL}
