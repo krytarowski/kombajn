@@ -158,24 +158,6 @@ l_noraw(lua_State *L) /* [-0, +0, v] */
 }
 
 int
-l_keypad(lua_State *L) /* [-2, +0, v] */
-{
-	struct lud_WINDOW *uw;
-	int flag;
-	int rv;
-
-	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
-	flag = lua_toboolean(L, 2);
-
-	rv = keypad(uw->win, flag);
-
-	if (rv != OK)
-		luaL_error(L, "keypad()");
-
-	return 0;
-}
-
-int
 l_start_color(lua_State *L) /* [-0, +0, v] */
 {
 	int rv;
@@ -219,6 +201,24 @@ l_newwin(lua_State *L) /* [-5, +1, -] */
 		luaL_error(L, "strdup()");
 
 	return 1;
+}
+
+int
+lud_WINDOW_keypad(lua_State *L) /* [-2, +0, v] */
+{
+	struct lud_WINDOW *uw;
+	int flag;
+	int rv;
+
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+	flag = lua_toboolean(L, 2);
+
+	rv = keypad(uw->win, flag);
+
+	if (rv != OK)
+		luaL_error(L, "keypad()");
+
+	return 0;
 }
 
 int
@@ -268,19 +268,21 @@ luaopen_curses(lua_State *L)
 		{"noecho",	l_noecho},
 		{"raw",		l_raw},
 		{"noraw",	l_noraw},
-		{"keypad",	l_keypad},
 		{"start_color",	l_start_color},
 		{"newwin",	l_newwin},
 		{NULL,		NULL}
 	};
 
 	static luaL_Reg lud_WINDOW_fns[] = {
+		{"keypad",	lud_WINDOW_keypad},
 		{"__tostring",	lud_WINDOW___tostring},
 		{"__gc",	lud_WINDOW___gc},
 		{NULL,		NULL}
 	};
 
 	luaL_newmetatable(L, "curses:window");
+	lua_pushvalue(L, -1);
+	lua_setfield(L, -2, "__index");
 	luaL_setfuncs(L, lud_WINDOW_fns, 0);
 
 	luaL_newlib(L, fns);
