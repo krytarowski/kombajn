@@ -1,0 +1,9 @@
+*~
+*.pico
+*.so
+*.so.*
+*._pic.a
+.gdbinit
+*.o
+kombajn
+*.a
