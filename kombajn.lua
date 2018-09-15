@@ -26,6 +26,7 @@
 
 local curses = require('curses')
 local unistd = require('unistd')
+local argv = require('args')
 
 local stdscr = curses.initscr()
 curses.cbreak()
