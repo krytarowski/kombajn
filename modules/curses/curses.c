@@ -32,19 +32,27 @@
 #include <curses.h>
 
 int
-l_initscr(lua_State *L)
+l_initscr(lua_State *L) /* [-0, +0, v] */
 {
+	WINDOW *w;
 
-	initscr();
+	w = initscr();
+
+	if (w == NULL)
+		luaL_error(L, "initscr()");
 
 	return 0;
 }
 
 int
-l_endwin(lua_State *L)
+l_endwin(lua_State *L) /* [-0, +0, v] */
 {
+	int rv;
 
-	endwin();
+	rv = endwin();
+
+	if (rv != OK)
+		luaL_error(L, "initscr()");
 
 	return 0;
 }
