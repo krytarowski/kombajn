@@ -37,7 +37,7 @@ l_sleep(lua_State *L) /* [-1, +1, -] */
 	int seconds;
 
 	/* stack: integer:seconds */
-	seconds = lua_tointeger(L, -1);
+	seconds = luaL_checkinteger(L, -1);
 	/* stack: integer:seconds */
 	lua_pop(L, 1);
 	/* stack: */
