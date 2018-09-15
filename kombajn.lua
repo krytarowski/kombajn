@@ -27,8 +27,10 @@
 local curses = require('curses')
 local unistd = require('unistd')
 
-curses.initscr()
+local stdscr = curses.initscr()
 curses.cbreak()
+curses.noecho()
+curses.keypad(stdscr, true)
 curses.start_color()
 unistd.sleep(10)
 curses.endwin()
