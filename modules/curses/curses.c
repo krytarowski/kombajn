@@ -50,17 +50,13 @@ l_initscr(lua_State *L) /* [-0, +1, v] */
 	if (win == NULL)
 		luaL_error(L, "initscr()");
 
-	/* stack: */
 	uw = (struct lud_WINDOW *)lua_newuserdata(L, sizeof(*uw));
-	/* stack: userdata:uw */
 
 	/* Zero uw in case of potential errors and passing it to g/c */
 	memset(uw, 0, sizeof(*uw));
 
 	luaL_getmetatable(L, "curses:window");
-	/* stack: userdata:uw metatable:'curses:window' */
 	lua_setmetatable(L, -2);
-	/* stack: userdata:uw */
 
 	uw->win = win;
 	uw->name = strdup("stdscr");
@@ -168,7 +164,6 @@ l_keypad(lua_State *L) /* [-2, +0, v] */
 	int flag;
 	int rv;
 
-	/* stack: userdata:uw boolean */
 	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
 	flag = lua_toboolean(L, 2);
 
@@ -200,67 +195,21 @@ l_newwin(lua_State *L) /* [-5, +1, -] */
 	const char *name;
 	int lines, cols, begin_y, begin_x;
 
-	/*
-	 * stack: string:name integer:lines integer:cols integer:begin_y
-	 *        integer:begin_x
-	 */
 	name = luaL_checkstring(L, 1);
-	/*
-	 * stack: string:name integer:lines integer:cols integer:begin_y
-	 *        integer:begin_x
-	 */
-
 	if (name == NULL)
 		luaL_error(L, "name cannot be unset");
 
-	/*
-	 * stack: string:name integer:lines integer:cols integer:begin_y
-	 *        integer:begin_x
-	 */
 	lines = luaL_checkinteger(L, 2);
-	/*
-	 * stack: string:name integer:lines integer:cols integer:begin_y
-	 *        integer:begin_x
-	 */
 	cols = luaL_checkinteger(L, 3);
-	/*
-	 * stack: string:name integer:lines integer:cols integer:begin_y
-	 *        integer:begin_x
-	 */
 	begin_y = luaL_checkinteger(L, 4);
-	/*
-	 * stack: string:name integer:lines integer:cols integer:begin_y
-	 *        integer:begin_x
-	 */
 	begin_x = luaL_checkinteger(L, 5);
-	/*
-	 * stack: string:name integer:lines integer:cols integer:begin_y
-	 *        integer:begin_x
-	 */
-
 	uw = (struct lud_WINDOW *)lua_newuserdata(L, sizeof(*uw));
-	/*
-	 * stack: string:name integer:lines integer:cols integer:begin_y
-	 *        integer:begin_x userdata:uw
-	 */
 
 	/* Zero uw in case of potential errors and passing it to g/c */
 	memset(uw, 0, sizeof(*uw));
 
-	/*
-	 * stack: string:name integer:lines integer:cols integer:begin_y
-	 *        integer:begin_x userdata:uw
-	 */
 	luaL_getmetatable(L, "curses:window");
-	/*
-	 * stack: string:name integer:lines integer:cols integer:begin_y
-	 *        integer:begin_x userdata:uw metatable:'curses:window'
-	 */
 	lua_setmetatable(L, -2);
-	/*
-	 * stack: string:name integer:lines integer:cols integer:begin_y
-	 *        integer:begin_x userdata:uw
-	 */
 
 	uw->win = newwin(lines, cols, begin_y, begin_x);
 	if (uw->win == NULL)
@@ -278,11 +227,8 @@ lud_WINDOW___tostring(lua_State *L) /* [-0, +0, -] */
 	struct lud_WINDOW *uw;
 	const char *name;
 
-	/* stack: userdata: */
 	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
-	/* stack: userdata: */
 	lua_pushstring(L, uw->name);
-	/* stack: userdata: string:name */
 
 	return 1;
 }
@@ -293,11 +239,9 @@ lud_WINDOW___gc(lua_State *L) /* [-0, +0, -] */
 	int rv;
 	struct lud_WINDOW *uw;
 
-	/* stack: userdata: */
 	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
-	/* stack: userdata: */
 
-	/* Never delete stdscr from initscr() */
+	/* Never delete stdscr */
 	if (uw->win && uw->win != stdscr) {
 		rv = delwin(uw->win);
 		if (rv != OK)
@@ -336,14 +280,10 @@ luaopen_curses(lua_State *L)
 		{NULL,		NULL}
 	};
 
-	/* stack: */
 	luaL_newmetatable(L, "curses:window");
-	/* stack: metatable:'curses:window' */
 	luaL_setfuncs(L, lud_WINDOW_fns, 0);
-	/* stack: metatable:'curses:window' */
 
 	luaL_newlib(L, fns);
-	/* stack: metatable:'curses:window' libtable:fns */
 
 	return 1;
 }
