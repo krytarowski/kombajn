@@ -109,6 +109,19 @@ l_noraw(lua_State *L) /* [-0, +0, v] */
 	return 0;
 }
 
+int
+l_start_color(lua_State *L) /* [-0, +0, v] */
+{
+	int rv;
+
+	rv = start_color();
+
+	if (rv != OK)
+		luaL_error(L, "start_color()");
+
+	return 0;
+}
+
 LUALIB_API int
 luaopen_curses(lua_State *L)
 {
@@ -119,6 +132,7 @@ luaopen_curses(lua_State *L)
 		{"nocbreak",	l_nocbreak},
 		{"raw",		l_raw},
 		{"noraw",	l_noraw},
+		{"start_color",	l_start_color},
 		{NULL,		NULL}
 	};
 
