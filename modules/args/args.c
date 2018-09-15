@@ -68,9 +68,6 @@ create_argv_table(lua_State *L)
 		lua_rawseti(L, -2, i++);
 		arg += len + 1;
 	}
-
-	/* Free the userdata buffer */
-	lua_remove(L, -2);
 }
 
 LUALIB_API int
