@@ -58,11 +58,67 @@ l_endwin(lua_State *L) /* [-0, +0, v] */
 }
 
 int
+l_cbreak(lua_State *L) /* [-0, +0, v] */
+{
+	int rv;
+
+	rv = cbreak();
+
+	if (rv != OK)
+		luaL_error(L, "cbreak()");
+
+	return 0;
+}
+
+int
+l_nocbreak(lua_State *L) /* [-0, +0, v] */
+{
+	int rv;
+
+	rv = nocbreak();
+
+	if (rv != OK)
+		luaL_error(L, "nocbreak()");
+
+	return 0;
+}
+
+int
+l_raw(lua_State *L) /* [-0, +0, v] */
+{
+	int rv;
+
+	rv = raw();
+
+	if (rv != OK)
+		luaL_error(L, "raw()");
+
+	return 0;
+}
+
+int
+l_noraw(lua_State *L) /* [-0, +0, v] */
+{
+	int rv;
+
+	rv = noraw();
+
+	if (rv != OK)
+		luaL_error(L, "noraw()");
+
+	return 0;
+}
+
+LUALIB_API int
 luaopen_curses(lua_State *L)
 {
 	luaL_Reg fns[] = {
 		{"initscr",	l_initscr},
 		{"endwin",	l_endwin},
+		{"cbreak",	l_cbreak},
+		{"nocbreak",	l_nocbreak},
+		{"raw",		l_raw},
+		{"noraw",	l_noraw},
 		{NULL,		NULL}
 	};
 
