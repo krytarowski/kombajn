@@ -31,6 +31,11 @@
 
 #include <curses.h>
 
+struct lud_WINDOW {
+	WINDOW *win;
+	const char *name;
+};
+
 int
 l_initscr(lua_State *L) /* [-0, +0, v] */
 {
@@ -122,10 +127,31 @@ l_start_color(lua_State *L) /* [-0, +0, v] */
 	return 0;
 }
 
+int
+lud_WINDOW_new(lua_State *L) /* [-0, +0, -] */
+{
+
+	return 0;
+}
+
+int
+lud_WINDOW___tostring(lua_State *L) /* [-0, +0, -] */
+{
+
+	return 0;
+}
+
+int
+lud_WINDOW___gc(lua_State *L) /* [-0, +0, -] */
+{
+
+	return 0;
+}
+
 LUALIB_API int
 luaopen_curses(lua_State *L)
 {
-	luaL_Reg fns[] = {
+	static luaL_Reg fns[] = {
 		{"initscr",	l_initscr},
 		{"endwin",	l_endwin},
 		{"cbreak",	l_cbreak},
@@ -136,7 +162,21 @@ luaopen_curses(lua_State *L)
 		{NULL,		NULL}
 	};
 
+	static luaL_Reg lud_WINDOW_fns[] = {
+		{"new",		lud_WINDOW_new},
+		{"__tostring",	lud_WINDOW___tostring},
+		{"__gc",	lud_WINDOW___gc},
+		{NULL,		NULL}
+	};
+
+	/* stack: */
+	luaL_newmetatable(L, "curses:window");
+	/* stack: metatable:'curses:window' */
+	luaL_setfuncs(L, lud_WINDOW_fns, 0);
+	/* stack: metatable:'curses:window' */
+
 	luaL_newlib(L, fns);
+	/* stack: metatable:'curses:window' libtable:fns */
 
 	return 1;
 }
