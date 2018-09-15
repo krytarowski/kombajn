@@ -52,7 +52,7 @@ l_endwin(lua_State *L) /* [-0, +0, v] */
 	rv = endwin();
 
 	if (rv != OK)
-		luaL_error(L, "initscr()");
+		luaL_error(L, "endwin()");
 
 	return 0;
 }
