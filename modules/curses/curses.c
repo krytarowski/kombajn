@@ -29,9 +29,13 @@
 #include <lua.h>
 #include <lauxlib.h>
 
+#include <curses.h>
+
 int
 l_initscr(lua_State *L)
 {
+
+	initscr();
 
 	return 0;
 }
@@ -39,6 +43,8 @@ l_initscr(lua_State *L)
 int
 l_endwin(lua_State *L)
 {
+
+	endwin();
 
 	return 0;
 }

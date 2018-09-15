@@ -8,4 +8,7 @@ LIB=	curses
 SRCS=	curses.c
 NOMAN=	# defined
 
+DPADD+=	${LIBCURSES}
+LDADD+=	-lcurses
+
 .include <bsd.lib.mk>
