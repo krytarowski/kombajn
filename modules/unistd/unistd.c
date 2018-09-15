@@ -37,10 +37,8 @@ l_sleep(lua_State *L) /* [-1, +1, v] */
 	int seconds;
 
 	/* stack: integer:seconds */
-	seconds = luaL_checkinteger(L, -1);
+	seconds = luaL_checkinteger(L, 1);
 	/* stack: integer:seconds */
-	lua_pop(L, 1);
-	/* stack: */
 
 	/*
 	 * A non-zero return value indicates signal
@@ -49,7 +47,7 @@ l_sleep(lua_State *L) /* [-1, +1, v] */
 	seconds = sleep(seconds);
 
 	lua_pushinteger(L, seconds);
-	/* stack: integer:seconds */
+	/* stack: integer:seconds integer:seconds */
 
 	return 1;
 }
