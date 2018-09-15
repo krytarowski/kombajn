@@ -29,5 +29,6 @@ local unistd = require('unistd')
 
 curses.initscr()
 curses.cbreak()
+curses.start_color()
 unistd.sleep(10)
 curses.endwin()
