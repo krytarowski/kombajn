@@ -29,9 +29,17 @@ local unistd = require('unistd')
 local argv = require('args')
 
 local stdscr = curses.initscr()
+
+print = function(...) return stdscr:wprintw(..., "\n") end
+
 curses.cbreak()
 curses.noecho()
 stdscr:keypad(true)
 curses.start_color()
-unistd.sleep(10)
+
+repeat
+	local key = stdscr:wgetch()
+	print(key)
+until key == 49 -- '1'
+
 curses.endwin()
