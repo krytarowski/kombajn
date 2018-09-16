@@ -37,6 +37,12 @@ curses.noecho()
 stdscr:keypad(true)
 curses.start_color()
 
+print("hello world!")
+begy, begx = stdscr:getbegyx()
+maxy, maxx = stdscr:getmaxyx()
+cury, curx = stdscr:getyx()
+print("begy=" .. begy .. ", begx=" .. begx .. ", maxy=" .. maxy .. ", maxx=" .. maxx .. ", cury=" .. cury .. " curx=" .. curx)
+
 repeat
 	local key = stdscr:wgetch()
 	print(key)
