@@ -240,6 +240,59 @@ lud_WINDOW_wgetch(lua_State *L) /* [-1, +1, v] */
 }
 
 int
+lud_WINDOW_wprintw(lua_State *L) /* [-N, +0, v] */
+{
+	struct lud_WINDOW *uw;
+	int rv;
+	size_t i, N;
+	int nameidx;
+	const char *kind;
+
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+
+	for (i = 2, N = lua_gettop(L); i <= N; i++) {
+		switch (lua_type(L, i)) {
+		case LUA_TNIL:
+			rv = wprintw(uw->win, "nil");
+			break;
+		case LUA_TNUMBER:
+			if (lua_isinteger(L, i))
+				rv = wprintw(uw->win, LUA_INTEGER_FMT,
+				     (LUAI_UACINT)lua_tointeger(L, i));
+			else
+				rv = wprintw(uw->win, LUA_NUMBER_FMT,
+				     (LUAI_UACNUMBER)lua_tonumber(L, i));
+			break;
+		case LUA_TBOOLEAN:
+			rv = wprintw(uw->win, "%s",
+			        lua_toboolean(L, i) ? "true" : "false");
+			break;
+		case LUA_TSTRING:
+			rv = wprintw(uw->win, "%s", lua_tostring(L, i));
+			break;
+		case LUA_TTABLE:
+		case LUA_TFUNCTION:
+		case LUA_TUSERDATA:
+		case LUA_TTHREAD:
+		case LUA_TLIGHTUSERDATA:
+		default:
+			nameidx = luaL_getmetafield(L, i, "__name");
+			if (nameidx == LUA_TSTRING)
+				kind = lua_tostring(L, -1);
+			else
+				kind = luaL_typename(L, i);
+			rv = wprintw(uw->win, "%s: %p", kind,
+			    lua_topointer(L, i));
+		}
+	}
+
+	if (rv != OK)
+		luaL_error(L, "wprintw()");
+
+	return 0;
+}
+
+int
 lud_WINDOW___tostring(lua_State *L) /* [-1, +1, v] */
 {
 	struct lud_WINDOW *uw;
@@ -294,6 +347,7 @@ luaopen_curses(lua_State *L)
 	static luaL_Reg lud_WINDOW_fns[] = {
 		{"keypad",	lud_WINDOW_keypad},
 		{"wgetch",	lud_WINDOW_wgetch},
+		{"wprintw",	lud_WINDOW_wprintw},
 		{"__tostring",	lud_WINDOW___tostring},
 		{"__gc",	lud_WINDOW___gc},
 		{NULL,		NULL}
