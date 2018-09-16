@@ -411,6 +411,25 @@ lud_WINDOW_wattrset(lua_State *L) /* [-2, +0, v] */
 }
 
 int
+lud_WINDOW_wmove(lua_State *L) /* [-3, +0, v] */
+{
+	int rv;
+	int y, x;
+	struct lud_WINDOW *uw;
+
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+	y = luaL_checkinteger(L, 2);
+	x = luaL_checkinteger(L, 3);
+
+	rv = wmove(uw->win, y, x);
+
+	if (rv != OK)
+		luaL_error(L, "wmove()");
+
+	return 0;
+}
+
+int
 lud_WINDOW___tostring(lua_State *L) /* [-1, +1, v] */
 {
 	struct lud_WINDOW *uw;
@@ -472,6 +491,7 @@ luaopen_curses(lua_State *L)
 		{"wattron",	lud_WINDOW_wattron},
 		{"wattroff",	lud_WINDOW_wattroff},
 		{"wattrset",	lud_WINDOW_wattrset},
+		{"wmove",	lud_WINDOW_wmove},
 		{"__tostring",	lud_WINDOW___tostring},
 		{"__gc",	lud_WINDOW___gc},
 		{NULL,		NULL}
