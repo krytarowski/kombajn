@@ -34,6 +34,22 @@
 
 #include <curses.h>
 
+#define register_constant(L,v)	\
+	(lua_pushstring(L, #v), lua_pushinteger(L, v), lua_rawset(L, -3))
+
+#define KEY_F1 KEY_F(1)
+#define KEY_F2 KEY_F(2)
+#define KEY_F3 KEY_F(3)
+#define KEY_F4 KEY_F(4)
+#define KEY_F5 KEY_F(5)
+#define KEY_F6 KEY_F(6)
+#define KEY_F7 KEY_F(7)
+#define KEY_F8 KEY_F(8)
+#define KEY_F9 KEY_F(9)
+#define KEY_F10 KEY_F(10)
+#define KEY_F11 KEY_F(11)
+#define KEY_F12 KEY_F(12)
+
 struct lud_WINDOW {
 	WINDOW *win;
 	const char *name;
@@ -466,7 +482,145 @@ luaopen_curses(lua_State *L)
 	lua_setfield(L, -2, "__index");
 	luaL_setfuncs(L, lud_WINDOW_fns, 0);
 
+	/* Put all curses(3) routines to a shared table with constants. */
 	luaL_newlib(L, fns);
+
+	/* Symbols returned in keypad mode */
+	register_constant(L, KEY_MIN);
+	register_constant(L, KEY_BREAK);
+	register_constant(L, KEY_DOWN);
+	register_constant(L, KEY_UP);
+	register_constant(L, KEY_LEFT);
+	register_constant(L, KEY_RIGHT);
+	register_constant(L, KEY_HOME);
+	register_constant(L, KEY_BACKSPACE);
+
+	register_constant(L, KEY_F1);
+	register_constant(L, KEY_F2);
+	register_constant(L, KEY_F3);
+	register_constant(L, KEY_F4);
+	register_constant(L, KEY_F5);
+	register_constant(L, KEY_F6);
+	register_constant(L, KEY_F7);
+	register_constant(L, KEY_F8);
+	register_constant(L, KEY_F9);
+	register_constant(L, KEY_F10);
+	register_constant(L, KEY_F11);
+	register_constant(L, KEY_F12);
+
+	register_constant(L, KEY_DL);
+	register_constant(L, KEY_IL);
+	register_constant(L, KEY_DC);
+	register_constant(L, KEY_IC);
+	register_constant(L, KEY_EIC);
+	register_constant(L, KEY_CLEAR);
+	register_constant(L, KEY_EOS);
+	register_constant(L, KEY_EOL);
+	register_constant(L, KEY_SF);
+	register_constant(L, KEY_SR);
+	register_constant(L, KEY_NPAGE);
+	register_constant(L, KEY_PPAGE);
+	register_constant(L, KEY_STAB);
+	register_constant(L, KEY_CTAB);
+	register_constant(L, KEY_CATAB);
+	register_constant(L, KEY_ENTER);
+	register_constant(L, KEY_SRESET);
+	register_constant(L, KEY_RESET);
+	register_constant(L, KEY_PRINT);
+	register_constant(L, KEY_LL);
+
+	register_constant(L, KEY_A1);
+	register_constant(L, KEY_A3);
+	register_constant(L, KEY_B2);
+	register_constant(L, KEY_C1);
+	register_constant(L, KEY_C3);
+
+	register_constant(L, KEY_BTAB);
+	register_constant(L, KEY_BEG);
+	register_constant(L, KEY_CANCEL);
+	register_constant(L, KEY_CLOSE);
+	register_constant(L, KEY_COMMAND);
+	register_constant(L, KEY_COPY);
+	register_constant(L, KEY_CREATE);
+	register_constant(L, KEY_END);
+	register_constant(L, KEY_EXIT);
+	register_constant(L, KEY_FIND);
+	register_constant(L, KEY_HELP);
+	register_constant(L, KEY_MARK);
+	register_constant(L, KEY_MESSAGE);
+	register_constant(L, KEY_MOVE);
+	register_constant(L, KEY_NEXT);
+	register_constant(L, KEY_OPEN);
+	register_constant(L, KEY_OPTIONS);
+	register_constant(L, KEY_PREVIOUS);
+	register_constant(L, KEY_REDO);
+	register_constant(L, KEY_REFERENCE);
+	register_constant(L, KEY_REFRESH);
+	register_constant(L, KEY_REPLACE);
+	register_constant(L, KEY_RESTART);
+	register_constant(L, KEY_RESUME);
+	register_constant(L, KEY_SAVE);
+	register_constant(L, KEY_SBEG);
+	register_constant(L, KEY_SCANCEL);
+	register_constant(L, KEY_SCOMMAND);
+	register_constant(L, KEY_SCOPY);
+	register_constant(L, KEY_SCREATE);
+	register_constant(L, KEY_SDC);
+	register_constant(L, KEY_SDL);
+	register_constant(L, KEY_SELECT);
+	register_constant(L, KEY_SEND);
+	register_constant(L, KEY_SEOL);
+	register_constant(L, KEY_SEXIT);
+	register_constant(L, KEY_SFIND);
+	register_constant(L, KEY_SHELP);
+	register_constant(L, KEY_SHOME);
+	register_constant(L, KEY_SIC);
+	register_constant(L, KEY_SLEFT);
+	register_constant(L, KEY_SMESSAGE);
+	register_constant(L, KEY_SMOVE);
+	register_constant(L, KEY_SNEXT);
+	register_constant(L, KEY_SOPTIONS);
+	register_constant(L, KEY_SPREVIOUS);
+	register_constant(L, KEY_SPRINT);
+	register_constant(L, KEY_SREDO);
+	register_constant(L, KEY_SREPLACE);
+	register_constant(L, KEY_SRIGHT);
+	register_constant(L, KEY_SRSUME);
+	register_constant(L, KEY_SSAVE);
+	register_constant(L, KEY_SSUSPEND);
+	register_constant(L, KEY_SUNDO);
+	register_constant(L, KEY_SUSPEND);
+	register_constant(L, KEY_UNDO);
+	register_constant(L, KEY_MOUSE);
+	register_constant(L, KEY_RESIZE);
+	register_constant(L, KEY_MAX);
+	register_constant(L, KEY_CODE_YES);
+
+	/* Attribute definitions */
+	register_constant(L, A_NORMAL);
+	register_constant(L, A_STANDOUT);
+	register_constant(L, A_UNDERLINE);
+	register_constant(L, A_REVERSE);
+	register_constant(L, A_BLINK);
+	register_constant(L, A_DIM);
+	register_constant(L, A_BOLD);
+	register_constant(L, A_BLANK);
+	register_constant(L, A_INVIS);
+	register_constant(L, A_PROTECT);
+	register_constant(L, A_ALTCHARSET);
+	register_constant(L, A_ATTRIBUTES);
+	register_constant(L, A_CHARTEXT);
+	register_constant(L, A_COLOR);
+
+	/* Color definitions (ANSI color numbers) */
+	register_constant(L, COLOR_BLACK);
+	register_constant(L, COLOR_RED);
+	register_constant(L, COLOR_GREEN);
+	register_constant(L, COLOR_YELLOW);
+	register_constant(L, COLOR_BLUE);
+	register_constant(L, COLOR_MAGENTA);
+	register_constant(L, COLOR_CYAN);
+	register_constant(L, COLOR_WHITE);
 
 	return 1;
 }
