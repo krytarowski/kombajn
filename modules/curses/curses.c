@@ -293,6 +293,38 @@ lud_WINDOW_wprintw(lua_State *L) /* [-N, +0, v] */
 }
 
 int
+lud_WINDOW_getbegyx(lua_State *L) /* [-1, +2, v] */
+{
+	int y, x;
+	struct lud_WINDOW *uw;
+
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+
+	getbegyx(uw->win, y, x);
+
+	lua_pushinteger(L, y);
+	lua_pushinteger(L, x);
+
+	return 2;
+}
+
+int
+lud_WINDOW_getmaxyx(lua_State *L) /* [-1, +2, v] */
+{
+	int y, x;
+	struct lud_WINDOW *uw;
+
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+
+	getmaxyx(uw->win, y, x);
+
+	lua_pushinteger(L, y);
+	lua_pushinteger(L, x);
+
+	return 2;
+}
+
+int
 lud_WINDOW___tostring(lua_State *L) /* [-1, +1, v] */
 {
 	struct lud_WINDOW *uw;
@@ -348,6 +380,8 @@ luaopen_curses(lua_State *L)
 		{"keypad",	lud_WINDOW_keypad},
 		{"wgetch",	lud_WINDOW_wgetch},
 		{"wprintw",	lud_WINDOW_wprintw},
+		{"getbegyx",	lud_WINDOW_getbegyx},
+		{"getmaxyx",	lud_WINDOW_getmaxyx},
 		{"__tostring",	lud_WINDOW___tostring},
 		{"__gc",	lud_WINDOW___gc},
 		{NULL,		NULL}
