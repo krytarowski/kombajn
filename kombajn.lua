@@ -28,6 +28,7 @@
 local argv = require('args')
 local curses = require('curses')
 local ctype = require('ctype')
+local signal = require('signal')
 local unistd = require('unistd')
 
 local stdscr = curses.initscr()
@@ -38,6 +39,12 @@ curses.cbreak()
 curses.noecho()
 stdscr:keypad(true)
 curses.start_color()
+
+signal.signal(signal.SIGQUIT, signal.SIG_IGN)
+signal.signal(signal.SIGTSTP, signal.SIG_IGN)
+signal.signal(signal.SIGTTIN, signal.SIG_IGN)
+signal.signal(signal.SIGTTOU, signal.SIG_IGN)
+signal.signal(signal.SIGINT, signal.SIG_IGN)
 
 local A_BOLD=curses.A_BOLD
 
