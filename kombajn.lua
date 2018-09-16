@@ -56,7 +56,7 @@ repeat
 	local key = stdscr:wgetch()
 
 	stdscr:wmove(maxy - 1, 0)
-	print("key = " .. key .. "   ")
+	print("key = " .. key .. " is_keypad=" .. tostring(stdscr:is_keypad()) .. "   ")
 	stdscr:wmove(cury, curx)
 
 	if key == curses.KEY_LEFT then
@@ -80,6 +80,14 @@ repeat
 			curx = curx - 1
 			stdscr:wmove(cury, curx)
 			print(' ')
+		end
+	elseif key == curses.KEY_RESIZE then
+		maxy, maxx = stdscr:getmaxyx()
+		if cury >= maxy then
+			cury = maxy
+		end
+		if curx >= maxx then
+			curx = maxx
 		end
 	else
 		print(string.format("%c", key))
