@@ -222,7 +222,25 @@ lud_WINDOW_keypad(lua_State *L) /* [-2, +0, v] */
 }
 
 int
-lud_WINDOW___tostring(lua_State *L) /* [-0, +0, -] */
+lud_WINDOW_wgetch(lua_State *L) /* [-1, +1, v] */
+{
+	struct lud_WINDOW *uw;
+	int rv;
+
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+
+	rv = wgetch(uw->win);
+
+	if (rv == ERR)
+		luaL_error(L, "wgetch()");
+
+	lua_pushinteger(L, rv);
+
+	return 1;
+}
+
+int
+lud_WINDOW___tostring(lua_State *L) /* [-1, +1, v] */
 {
 	struct lud_WINDOW *uw;
 	const char *name;
@@ -234,7 +252,7 @@ lud_WINDOW___tostring(lua_State *L) /* [-0, +0, -] */
 }
 
 int
-lud_WINDOW___gc(lua_State *L) /* [-0, +0, -] */
+lud_WINDOW___gc(lua_State *L) /* [-1, +0, v] */
 {
 	int rv;
 	struct lud_WINDOW *uw;
@@ -275,6 +293,7 @@ luaopen_curses(lua_State *L)
 
 	static luaL_Reg lud_WINDOW_fns[] = {
 		{"keypad",	lud_WINDOW_keypad},
+		{"wgetch",	lud_WINDOW_wgetch},
 		{"__tostring",	lud_WINDOW___tostring},
 		{"__gc",	lud_WINDOW___gc},
 		{NULL,		NULL}
