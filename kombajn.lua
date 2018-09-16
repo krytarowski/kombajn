@@ -75,7 +75,7 @@ repeat
 		if cury < maxy - 1 then
 			cury = cury + 1
 		end
-	elseif key == curses.KEY_BACKSPACE then
+	elseif key == curses.KEY_BACKSPACE or key == 127 then
 		if curx > begx then
 			curx = curx - 1
 			stdscr:wmove(cury, curx)
