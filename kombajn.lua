@@ -30,22 +30,22 @@ local argv = require('args')
 
 local stdscr = curses.initscr()
 
-print = function(...) return stdscr:wprintw(..., "\n") end
+print = function(...) return stdscr:wprintw(...) end
 
 curses.cbreak()
 curses.noecho()
 stdscr:keypad(true)
 curses.start_color()
 
-print("hello world!")
+print("hello world!\n")
 begy, begx = stdscr:getbegyx()
 maxy, maxx = stdscr:getmaxyx()
 cury, curx = stdscr:getyx()
-print("begy=" .. begy .. ", begx=" .. begx .. ", maxy=" .. maxy .. ", maxx=" .. maxx .. ", cury=" .. cury .. " curx=" .. curx)
+print("begy=" .. begy .. ", begx=" .. begx .. ", maxy=" .. maxy .. ", maxx=" .. maxx .. ", cury=" .. cury .. " curx=" .. curx .. '\n')
 
 repeat
 	local key = stdscr:wgetch()
-	print(key)
+	print(string.format("%c", key))
 until key == 49 -- '1'
 
 curses.endwin()
