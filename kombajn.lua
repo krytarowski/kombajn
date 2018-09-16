@@ -78,6 +78,7 @@ repeat
 	elseif key == curses.KEY_BACKSPACE then
 		if curx > begx then
 			curx = curx - 1
+			stdscr:wmove(cury, curx)
 			print(' ')
 		end
 	else
