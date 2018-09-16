@@ -341,6 +341,60 @@ lud_WINDOW_getyx(lua_State *L) /* [-1, +2, v] */
 }
 
 int
+lud_WINDOW_wattron(lua_State *L) /* [-2, +0, v] */
+{
+	int rv;
+	int attr;
+	struct lud_WINDOW *uw;
+
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+	attr = luaL_checkinteger(L, 2);
+
+	rv = wattron(uw->win, attr);
+
+	if (rv != OK)
+		luaL_error(L, "wattron()");
+
+	return 0;
+}
+
+int
+lud_WINDOW_wattroff(lua_State *L) /* [-2, +0, v] */
+{
+	int rv;
+	int attr;
+	struct lud_WINDOW *uw;
+
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+	attr = luaL_checkinteger(L, 2);
+
+	rv = wattroff(uw->win, attr);
+
+	if (rv != OK)
+		luaL_error(L, "wattroff()");
+
+	return 0;
+}
+
+int
+lud_WINDOW_wattrset(lua_State *L) /* [-2, +0, v] */
+{
+	int rv;
+	int attr;
+	struct lud_WINDOW *uw;
+
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+	attr = luaL_checkinteger(L, 2);
+
+	rv = wattrset(uw->win, attr);
+
+	if (rv != OK)
+		luaL_error(L, "wattrset()");
+
+	return 0;
+}
+
+int
 lud_WINDOW___tostring(lua_State *L) /* [-1, +1, v] */
 {
 	struct lud_WINDOW *uw;
@@ -399,6 +453,9 @@ luaopen_curses(lua_State *L)
 		{"getbegyx",	lud_WINDOW_getbegyx},
 		{"getmaxyx",	lud_WINDOW_getmaxyx},
 		{"getyx",	lud_WINDOW_getyx},
+		{"wattron",	lud_WINDOW_wattron},
+		{"wattroff",	lud_WINDOW_wattroff},
+		{"wattrset",	lud_WINDOW_wattrset},
 		{"__tostring",	lud_WINDOW___tostring},
 		{"__gc",	lud_WINDOW___gc},
 		{NULL,		NULL}
