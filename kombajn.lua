@@ -45,27 +45,41 @@ stdscr:wattroff(A_BOLD)
 begy, begx = stdscr:getbegyx()
 maxy, maxx = stdscr:getmaxyx()
 cury, curx = stdscr:getyx()
-print("begy=" .. begy .. ", begx=" .. begx .. ", maxy=" .. maxy .. ", maxx=" .. maxx .. ", cury=" .. cury .. " curx=" .. curx .. '\n')
 
 repeat
+	stdscr:wmove(1, 0)
+	print("begy=" .. begy .. ", begx=" .. begx .. ", maxy=" .. maxy .. ", maxx=" .. maxx .. ", cury=" .. cury .. " curx=" .. curx .. '\n')
+
+	stdscr:wmove(cury, curx)
+	stdscr:wrefresh()
+
 	local key = stdscr:wgetch()
 
+	stdscr:wmove(maxy - 1, 0)
+	print("key = " .. key .. "   ")
+	stdscr:wmove(cury, curx)
+
 	if key == curses.KEY_LEFT then
-		curx = curx - 1
-		stdscr:wmove(cury, curx)
-		stdscr:wrefresh()
+		if curx > begx then
+			curx = curx - 1
+		end
 	elseif key == curses.KEY_RIGHT then
-		curx = curx + 1
-		stdscr:wmove(cury, curx)
-		stdscr:wrefresh()
+		if curx < maxx - 1 then
+			curx = curx + 1
+		end
 	elseif key == curses.KEY_UP then
-		cury = cury - 1
-		stdscr:wmove(cury, curx)
-		stdscr:wrefresh()
+		if cury > begy then
+			cury = cury - 1
+		end
 	elseif key == curses.KEY_DOWN then
-		cury = cury + 1
-		stdscr:wmove(cury, curx)
-		stdscr:wrefresh()
+		if cury < maxy - 1 then
+			cury = cury + 1
+		end
+	elseif key == curses.KEY_BACKSPACE then
+		if curx > begx then
+			curx = curx - 1
+			print(' ')
+		end
 	else
 		print(string.format("%c", key))
 		cury, curx = stdscr:getyx()
