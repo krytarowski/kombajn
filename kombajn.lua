@@ -24,9 +24,11 @@
 -- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 -- POSSIBILITY OF SUCH DAMAGE.
 
-local curses = require('curses')
-local unistd = require('unistd')
+
 local argv = require('args')
+local curses = require('curses')
+local ctype = require('ctype')
+local unistd = require('unistd')
 
 local stdscr = curses.initscr()
 
@@ -89,7 +91,7 @@ repeat
 		if curx >= maxx then
 			curx = maxx
 		end
-	else
+	elseif ctype.isprint(key) then
 		print(string.format("%c", key))
 		cury, curx = stdscr:getyx()
 	end
