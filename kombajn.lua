@@ -49,7 +49,27 @@ print("begy=" .. begy .. ", begx=" .. begx .. ", maxy=" .. maxy .. ", maxx=" .. 
 
 repeat
 	local key = stdscr:wgetch()
-	print(string.format("%c", key))
+
+	if key == curses.KEY_LEFT then
+		curx = curx - 1
+		stdscr:wmove(cury, curx)
+		stdscr:wrefresh()
+	elseif key == curses.KEY_RIGHT then
+		curx = curx + 1
+		stdscr:wmove(cury, curx)
+		stdscr:wrefresh()
+	elseif key == curses.KEY_UP then
+		cury = cury - 1
+		stdscr:wmove(cury, curx)
+		stdscr:wrefresh()
+	elseif key == curses.KEY_DOWN then
+		cury = cury + 1
+		stdscr:wmove(cury, curx)
+		stdscr:wrefresh()
+	else
+		print(string.format("%c", key))
+		cury, curx = stdscr:getyx()
+	end
 until key == curses.KEY_F1
 
 curses.endwin()
