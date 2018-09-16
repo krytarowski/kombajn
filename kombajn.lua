@@ -37,7 +37,11 @@ curses.noecho()
 stdscr:keypad(true)
 curses.start_color()
 
-print("hello world!\n")
+local A_BOLD=curses.A_BOLD
+
+stdscr:wattron(A_BOLD)
+print("hello bold world!\n")
+stdscr:wattroff(A_BOLD)
 begy, begx = stdscr:getbegyx()
 maxy, maxx = stdscr:getmaxyx()
 cury, curx = stdscr:getyx()
@@ -46,6 +50,6 @@ print("begy=" .. begy .. ", begx=" .. begx .. ", maxy=" .. maxy .. ", maxx=" .. 
 repeat
 	local key = stdscr:wgetch()
 	print(string.format("%c", key))
-until key == 49 -- '1'
+until key == curses.KEY_F1
 
 curses.endwin()
