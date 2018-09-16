@@ -77,6 +77,10 @@ repeat
 		if cury < maxy - 1 then
 			cury = cury + 1
 		end
+	elseif key == curses.KEY_HOME then
+		curx = begx
+	elseif key == curses.KEY_END then
+		curx = maxx - 1
 	elseif key == curses.KEY_BACKSPACE or key == 127 then
 		if curx > begx then
 			curx = curx - 1
