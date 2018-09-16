@@ -238,6 +238,21 @@ lud_WINDOW_keypad(lua_State *L) /* [-2, +0, v] */
 }
 
 int
+lud_WINDOW_is_keypad(lua_State *L) /* [-1, +1, v] */
+{
+	struct lud_WINDOW *uw;
+	bool flag;
+
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+
+	flag = is_keypad(uw->win);
+
+	lua_pushboolean(L, flag ? 1 : 0);
+
+	return 1;
+}
+
+int
 lud_WINDOW_wgetch(lua_State *L) /* [-1, +1, v] */
 {
 	struct lud_WINDOW *uw;
@@ -499,6 +514,7 @@ luaopen_curses(lua_State *L)
 
 	static luaL_Reg lud_WINDOW_fns[] = {
 		{"keypad",	lud_WINDOW_keypad},
+		{"is_keypad",	lud_WINDOW_is_keypad},
 		{"wgetch",	lud_WINDOW_wgetch},
 		{"wprintw",	lud_WINDOW_wprintw},
 		{"getbegyx",	lud_WINDOW_getbegyx},
