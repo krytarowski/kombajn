@@ -213,7 +213,7 @@ l_newwin(lua_State *L) /* [-5, +1, -] */
 	if (uw->win == NULL)
 		luaL_error(L, "newwin()");
 	uw->name = strdup(name);
-	if (uw->win == NULL)
+	if (uw->name == NULL)
 		luaL_error(L, "strdup()");
 
 	return 1;
