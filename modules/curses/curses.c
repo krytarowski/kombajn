@@ -242,6 +242,18 @@ l_border(lua_State *L) /* [-8, +0, v] */
 }
 
 int
+l_use_env(lua_State *L) /* [-1, +0, v] */
+{
+	bool value;
+
+	value = lua_toboolean(L, 1);
+
+	use_env(value);
+
+	return 0;
+}
+
+int
 lud_WINDOW_keypad(lua_State *L) /* [-2, +0, v] */
 {
 	struct lud_WINDOW *uw;
@@ -574,6 +586,7 @@ luaopen_curses(lua_State *L)
 		{"start_color",	l_start_color},
 		{"newwin",	l_newwin},
 		{"border",	l_border},
+		{"use_env",	l_use_env},
 		{NULL,		NULL}
 	};
 
