@@ -220,6 +220,28 @@ l_newwin(lua_State *L) /* [-5, +1, -] */
 }
 
 int
+l_border(lua_State *L) /* [-8, +0, v] */
+{
+	int rv;
+	chtype ls, rs, ts, bs, tl, tr, bl, br;
+
+	ls = luaL_checkinteger(L, 1);
+	rs = luaL_checkinteger(L, 2);
+	ts = luaL_checkinteger(L, 3);
+	bs = luaL_checkinteger(L, 4);
+	tl = luaL_checkinteger(L, 5);
+	tr = luaL_checkinteger(L, 6);
+	bl = luaL_checkinteger(L, 7);
+	br = luaL_checkinteger(L, 8);
+
+	rv = border(ls, rs, ts, bs, tl, tr, bl, br);
+	if (rv != OK)
+		luaL_error(L, "border()");
+
+	return 0;
+}
+
+int
 lud_WINDOW_keypad(lua_State *L) /* [-2, +0, v] */
 {
 	struct lud_WINDOW *uw;
@@ -461,6 +483,48 @@ lud_WINDOW_wrefresh(lua_State *L) /* [-1, +0, v] */
 }
 
 int
+lud_WINDOW_box(lua_State *L) /* [-3, +0, v] */
+{
+	int rv;
+	chtype vertical, horizontal;
+	struct lud_WINDOW *uw;
+
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+
+	vertical = luaL_checkinteger(L, 2);
+	horizontal = luaL_checkinteger(L, 3);
+
+	rv = box(uw->win, vertical, horizontal);
+
+	return rv;
+}
+
+int
+lud_WINDOW_wborder(lua_State *L) /* [-9, +0, v] */
+{
+	int rv;
+	chtype ls, rs, ts, bs, tl, tr, bl, br;
+	struct lud_WINDOW *uw;
+
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+
+	ls = luaL_checkinteger(L, 2);
+	rs = luaL_checkinteger(L, 3);
+	ts = luaL_checkinteger(L, 4);
+	bs = luaL_checkinteger(L, 5);
+	tl = luaL_checkinteger(L, 6);
+	tr = luaL_checkinteger(L, 7);
+	bl = luaL_checkinteger(L, 8);
+	br = luaL_checkinteger(L, 9);
+
+	rv = wborder(uw->win, ls, rs, ts, bs, tl, tr, bl, br);
+	if (rv != OK)
+		luaL_error(L, "border()");
+
+	return 0;
+}
+
+int
 lud_WINDOW___tostring(lua_State *L) /* [-1, +1, v] */
 {
 	struct lud_WINDOW *uw;
@@ -509,6 +573,7 @@ luaopen_curses(lua_State *L)
 		{"noraw",	l_noraw},
 		{"start_color",	l_start_color},
 		{"newwin",	l_newwin},
+		{"border",	l_border},
 		{NULL,		NULL}
 	};
 
@@ -525,6 +590,8 @@ luaopen_curses(lua_State *L)
 		{"wattrset",	lud_WINDOW_wattrset},
 		{"wmove",	lud_WINDOW_wmove},
 		{"wrefresh",	lud_WINDOW_wrefresh},
+		{"box",		lud_WINDOW_box},
+		{"wborder",	lud_WINDOW_wborder},
 		{"__tostring",	lud_WINDOW___tostring},
 		{"__gc",	lud_WINDOW___gc},
 		{NULL,		NULL}
