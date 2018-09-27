@@ -254,6 +254,15 @@ l_use_env(lua_State *L) /* [-1, +0, v] */
 }
 
 int
+l_filter(lua_State *L) /* [-0, +0, v] */
+{
+
+	filter();
+
+	return 0;
+}
+
+int
 lud_WINDOW_keypad(lua_State *L) /* [-2, +0, v] */
 {
 	struct lud_WINDOW *uw;
@@ -587,6 +596,7 @@ luaopen_curses(lua_State *L)
 		{"newwin",	l_newwin},
 		{"border",	l_border},
 		{"use_env",	l_use_env},
+		{"filter",	l_filter},
 		{NULL,		NULL}
 	};
 
