@@ -64,10 +64,6 @@ repeat
 
 	local key = stdscr:wgetch()
 
-	stdscr:wmove(maxy - 1, 0)
-	print("key = " .. key .. " is_keypad=" .. tostring(stdscr:is_keypad()) .. "   ")
-	stdscr:wmove(cury, curx)
-
 	if key == curses.KEY_LEFT then
 		if curx > begx then
 			curx = curx - 1
@@ -106,6 +102,11 @@ repeat
 		print(string.format("%c", key))
 		cury, curx = stdscr:getyx()
 	end
+
+	stdscr:wmove(maxy - 1, 0)
+	print("key = " .. key .. " is_keypad=" .. tostring(stdscr:is_keypad()) .. "   ")
+	stdscr:wmove(cury, curx)
+
 until key == curses.KEY_F1
 
 curses.endwin()
