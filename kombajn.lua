@@ -60,7 +60,6 @@ repeat
 	print("begy=" .. begy .. ", begx=" .. begx .. ", maxy=" .. maxy .. ", maxx=" .. maxx .. ", cury=" .. cury .. " curx=" .. curx .. '\n')
 
 	stdscr:wmove(cury, curx)
-	stdscr:wrefresh()
 
 	local key = stdscr:wgetch()
 
