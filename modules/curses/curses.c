@@ -414,6 +414,63 @@ l_addchnstr(lua_State *L) /* [-2, +0, v] */
 }
 
 int
+l_addchstr(lua_State *L) /* [-1, +0, v] */
+{
+	const chtype *bytes;
+	int rv;
+
+	bytes = (chtype *)luaL_checkstring(L, 1);
+	if (bytes == NULL)
+		luaL_error(L, "bytes cannot be unset");
+
+	rv = addchstr(bytes);
+
+	if (rv != OK)
+		luaL_error(L, "addchstr()");
+
+	return 0;
+}
+
+int
+l_addnstr(lua_State *L) /* [-2, +0, v] */
+{
+	const char *bytes;
+	int count;
+	int rv;
+
+	bytes = luaL_checkstring(L, 1);
+	if (bytes == NULL)
+		luaL_error(L, "bytes cannot be unset");
+
+	count = luaL_checkinteger(L, 2);
+
+	rv = addnstr(bytes, count);
+
+	if (rv != OK)
+		luaL_error(L, "addnstr()");
+
+	return 0;
+}
+
+int
+l_addstr(lua_State *L) /* [-1, +0, v] */
+{
+	const char *bytes;
+	int rv;
+
+	bytes = luaL_checkstring(L, 1);
+	if (bytes == NULL)
+		luaL_error(L, "bytes cannot be unset");
+
+	rv = addstr(bytes);
+
+	if (rv != OK)
+		luaL_error(L, "addstr()");
+
+	return 0;
+}
+
+int
 lud_WINDOW_keypad(lua_State *L) /* [-2, +0, v] */
 {
 	struct lud_WINDOW *uw;
@@ -808,6 +865,9 @@ luaopen_curses(lua_State *L)
 		{"addbytes",	l_addbytes},
 		{"addch",	l_addch},
 		{"addchnstr",	l_addchnstr},
+		{"addchstr",	l_addchstr},
+		{"addnstr",	l_addnstr},
+		{"addstr",	l_addstr},
 		{NULL,		NULL}
 	};
 
