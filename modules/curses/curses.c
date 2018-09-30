@@ -870,6 +870,9 @@ lud_WINDOW_box(lua_State *L) /* [-3, +0, v] */
 
 	rv = box(uw->win, vertical, horizontal);
 
+	if (rv != OK)
+		luaL_error(L, "box()");
+
 	return rv;
 }
 
@@ -893,7 +896,7 @@ lud_WINDOW_wborder(lua_State *L) /* [-9, +0, v] */
 
 	rv = wborder(uw->win, ls, rs, ts, bs, tl, tr, bl, br);
 	if (rv != OK)
-		luaL_error(L, "border()");
+		luaL_error(L, "wborder()");
 
 	return 0;
 }
