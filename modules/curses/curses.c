@@ -377,6 +377,22 @@ l_addbytes(lua_State *L) /* [-2, +0, v] */
 }
 
 int
+l_addch(lua_State *L) /* [-1, +0, v] */
+{
+	int ch;
+	int rv;
+
+	ch = luaL_checkinteger(L, 1);
+
+	rv = addch(ch);
+
+	if (rv != OK)
+		luaL_error(L, "addch()");
+
+	return 0;
+}
+
+int
 lud_WINDOW_keypad(lua_State *L) /* [-2, +0, v] */
 {
 	struct lud_WINDOW *uw;
@@ -769,6 +785,7 @@ luaopen_curses(lua_State *L)
 		{"COLOR_PAIR",	l_COLOR_PAIR},
 		{"PAIR_NUMBER", l_PAIR_NUMBER},
 		{"addbytes",	l_addbytes},
+		{"addch",	l_addch},
 		{NULL,		NULL}
 	};
 
