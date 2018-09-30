@@ -725,6 +725,21 @@ l_erase(lua_State *L) /* [-0, +0, v] */
 }
 
 int
+l_getch(lua_State *L) /* [-0, +1, v] */
+{
+	int rv;
+
+	rv = getch();
+
+	if (rv == ERR)
+		luaL_error(L, "getch()");
+
+	lua_pushinteger(L, rv);
+
+	return 1;
+}
+
+int
 lud_WINDOW_keypad(lua_State *L) /* [-2, +0, v] */
 {
 	struct lud_WINDOW *uw;
@@ -1142,6 +1157,7 @@ luaopen_curses(lua_State *L)
 		{"deleteln",	l_deleteln},
 		{"echochar",	l_echochar},
 		{"erase",	l_erase},
+		{"getch",	l_getch},
 		{NULL,		NULL}
 	};
 
