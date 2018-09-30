@@ -471,6 +471,24 @@ l_addstr(lua_State *L) /* [-1, +0, v] */
 }
 
 int
+l_attr_get(lua_State *L) /* [-0, +2, v] */
+{
+	attr_t attr;
+	short pair;
+	int rv;
+
+	rv = attr_get(&attr, &pair, NULL);
+
+	if (rv != OK)
+		luaL_error(L, "attr_get()");
+
+	lua_pushinteger(L, attr);
+	lua_pushinteger(L, pair);
+
+	return 0;
+}
+
+int
 lud_WINDOW_keypad(lua_State *L) /* [-2, +0, v] */
 {
 	struct lud_WINDOW *uw;
@@ -868,6 +886,7 @@ luaopen_curses(lua_State *L)
 		{"addchstr",	l_addchstr},
 		{"addnstr",	l_addnstr},
 		{"addstr",	l_addstr},
+		{"attr_get",	l_attr_get},
 		{NULL,		NULL}
 	};
 
