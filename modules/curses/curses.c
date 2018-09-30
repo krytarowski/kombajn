@@ -603,6 +603,19 @@ l_bkgd(lua_State *L) /* [-1, +0, v] */
 }
 
 int
+l_bkgdset(lua_State *L) /* [-1, +0, v] */
+{
+	int chtype;
+	int rv;
+
+	chtype = luaL_checkinteger(L, 1);
+
+	bkgdset(chtype);
+
+	return 0;
+}
+
+int
 lud_WINDOW_keypad(lua_State *L) /* [-2, +0, v] */
 {
 	struct lud_WINDOW *uw;
@@ -1008,6 +1021,7 @@ luaopen_curses(lua_State *L)
 		{"attron",	l_attron},
 		{"attrset",	l_attrset},
 		{"bkgd",	l_bkgd},
+		{"bkgdset",	l_bkgdset},
 		{NULL,		NULL}
 	};
 
