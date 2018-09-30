@@ -539,6 +539,54 @@ l_attr_set(lua_State *L) /* [-2, +0, v] */
 }
 
 int
+l_attroff(lua_State *L) /* [-1, +0, v] */
+{
+	int attr;
+	int rv;
+
+	attr = luaL_checkinteger(L, 1);
+
+	rv = attroff(attr);
+
+	if (rv != OK)
+		luaL_error(L, "attroff()");
+
+	return 0;
+}
+
+int
+l_attron(lua_State *L) /* [-1, +0, v] */
+{
+	int attr;
+	int rv;
+
+	attr = luaL_checkinteger(L, 1);
+
+	rv = attron(attr);
+
+	if (rv != OK)
+		luaL_error(L, "attron()");
+
+	return 0;
+}
+
+int
+l_attrset(lua_State *L) /* [-1, +0, v] */
+{
+	int attr;
+	int rv;
+
+	attr = luaL_checkinteger(L, 1);
+
+	rv = attrset(attr);
+
+	if (rv != OK)
+		luaL_error(L, "attrset()");
+
+	return 0;
+}
+
+int
 lud_WINDOW_keypad(lua_State *L) /* [-2, +0, v] */
 {
 	struct lud_WINDOW *uw;
@@ -940,6 +988,9 @@ luaopen_curses(lua_State *L)
 		{"attr_off",	l_attr_off},
 		{"attr_on",	l_attr_on},
 		{"attr_set",	l_attr_set},
+		{"attroff",	l_attroff},
+		{"attron",	l_attron},
+		{"attrset",	l_attrset},
 		{NULL,		NULL}
 	};
 
