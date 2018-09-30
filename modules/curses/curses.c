@@ -356,6 +356,27 @@ l_PAIR_NUMBER(lua_State *L) /* [-1, +1, v] */
 }
 
 int
+l_addbytes(lua_State *L) /* [-2, +0, v] */
+{
+	const char *bytes;
+	int count;
+	int rv;
+
+	bytes = luaL_checkstring(L, 1);
+	if (bytes == NULL)
+		luaL_error(L, "bytes cannot be unset");
+
+	count = luaL_checkinteger(L, 2);
+
+	rv = addbytes(bytes, count);
+
+	if (rv != OK)
+		luaL_error(L, "addbytes()");
+
+	return 0;
+}
+
+int
 lud_WINDOW_keypad(lua_State *L) /* [-2, +0, v] */
 {
 	struct lud_WINDOW *uw;
@@ -747,6 +768,7 @@ luaopen_curses(lua_State *L)
 		{"ripoffline",	l_ripoffline},
 		{"COLOR_PAIR",	l_COLOR_PAIR},
 		{"PAIR_NUMBER", l_PAIR_NUMBER},
+		{"addbytes",	l_addbytes},
 		{NULL,		NULL}
 	};
 
