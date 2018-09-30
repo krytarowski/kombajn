@@ -616,6 +616,19 @@ l_bkgdset(lua_State *L) /* [-1, +0, v] */
 }
 
 int
+l_clear(lua_State *L) /* [-0, +0, -] */
+{
+	int rv;
+
+	rv = clear();
+
+	if (rv != OK)
+		luaL_error(L, "clear()");
+
+	return 0;
+}
+
+int
 lud_WINDOW_keypad(lua_State *L) /* [-2, +0, v] */
 {
 	struct lud_WINDOW *uw;
@@ -1025,6 +1038,7 @@ luaopen_curses(lua_State *L)
 		{"attrset",	l_attrset},
 		{"bkgd",	l_bkgd},
 		{"bkgdset",	l_bkgdset},
+		{"clear",	l_clear},
 		{NULL,		NULL}
 	};
 
