@@ -55,7 +55,7 @@ begy, begx = stdscr:getbegyx()
 maxy, maxx = stdscr:getmaxyx()
 cury, curx = stdscr:getyx()
 
-key = 0
+local key = 0
 
 repeat
 	curses.border(string.byte('1'), string.byte('2'), string.byte('3'), string.byte('4'), string.byte('5'), string.byte('6'), string.byte('7'), string.byte('8'))
