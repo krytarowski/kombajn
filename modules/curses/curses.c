@@ -606,7 +606,6 @@ int
 l_bkgdset(lua_State *L) /* [-1, +0, v] */
 {
 	int chtype;
-	int rv;
 
 	chtype = luaL_checkinteger(L, 1);
 
@@ -692,6 +691,22 @@ l_deleteln(lua_State *L) /* [-0, +0, v] */
 
 	if (rv != OK)
 		luaL_error(L, "deleteln()");
+
+	return 0;
+}
+
+int
+l_echochar(lua_State *L) /* [-1, +0, v] */
+{
+	int chtype;
+	int rv;
+
+	chtype = luaL_checkinteger(L, 1);
+
+	rv = echochar(chtype);
+
+	if (rv != OK)
+		luaL_error(L, "echochar()");
 
 	return 0;
 }
@@ -1112,6 +1127,7 @@ luaopen_curses(lua_State *L)
 		{"color_set",	l_color_set},
 		{"delch",	l_delch},
 		{"deleteln",	l_deleteln},
+		{"echochar",	l_echochar},
 		{NULL,		NULL}
 	};
 
