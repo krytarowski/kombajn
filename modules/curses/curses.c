@@ -616,7 +616,7 @@ l_bkgdset(lua_State *L) /* [-1, +0, v] */
 }
 
 int
-l_clear(lua_State *L) /* [-0, +0, -] */
+l_clear(lua_State *L) /* [-0, +0, v] */
 {
 	int rv;
 
@@ -624,6 +624,32 @@ l_clear(lua_State *L) /* [-0, +0, -] */
 
 	if (rv != OK)
 		luaL_error(L, "clear()");
+
+	return 0;
+}
+
+int
+l_clrtobot(lua_State *L) /* [-0, +0, v] */
+{
+	int rv;
+
+	rv = clrtobot();
+
+	if (rv != OK)
+		luaL_error(L, "clrtobot()");
+
+	return 0;
+}
+
+int
+l_clrtoeol(lua_State *L) /* [-0, +0, v] */
+{
+	int rv;
+
+	rv = clrtoeol();
+
+	if (rv != OK)
+		luaL_error(L, "clrtoeol()");
 
 	return 0;
 }
@@ -1039,6 +1065,8 @@ luaopen_curses(lua_State *L)
 		{"bkgd",	l_bkgd},
 		{"bkgdset",	l_bkgdset},
 		{"clear",	l_clear},
+		{"clrtobot",	l_clrtobot},
+		{"clrtoeol",	l_clrtoeol},
 		{NULL,		NULL}
 	};
 
