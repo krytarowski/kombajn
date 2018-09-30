@@ -684,6 +684,19 @@ l_delch(lua_State *L) /* [-0, +0, v] */
 }
 
 int
+l_deleteln(lua_State *L) /* [-0, +0, v] */
+{
+	int rv;
+
+	rv = deleteln();
+
+	if (rv != OK)
+		luaL_error(L, "deleteln()");
+
+	return 0;
+}
+
+int
 lud_WINDOW_keypad(lua_State *L) /* [-2, +0, v] */
 {
 	struct lud_WINDOW *uw;
@@ -1098,6 +1111,7 @@ luaopen_curses(lua_State *L)
 		{"clrtoeol",	l_clrtoeol},
 		{"color_set",	l_color_set},
 		{"delch",	l_delch},
+		{"deleteln",	l_deleteln},
 		{NULL,		NULL}
 	};
 
