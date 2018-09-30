@@ -344,6 +344,18 @@ l_COLOR_PAIR(lua_State *L) /* [-1, +1, v] */
 }
 
 int
+l_PAIR_NUMBER(lua_State *L) /* [-1, +1, v] */
+{
+	int n;
+
+	n = luaL_checkinteger(L, 1);
+
+	lua_pushinteger(L, PAIR_NUMBER(n));
+
+	return 1;
+}
+
+int
 lud_WINDOW_keypad(lua_State *L) /* [-2, +0, v] */
 {
 	struct lud_WINDOW *uw;
@@ -662,12 +674,12 @@ lud_WINDOW___gc(lua_State *L) /* [-1, +0, v] */
 }
 
 int
-curses___index(lua_State *L)
+curses___index(lua_State *L) /* [-2, +1, v] */
 {
 	struct lud_WINDOW *uw;
 	WINDOW *win;
 
-	/* Argument 1 is self, skip */
+	/* Argument 1 is table, skip */
 	const char *__index = luaL_checkstring(L, 2);
 
 	if (strcmp(__index, "curscr") == 0) {
@@ -734,6 +746,7 @@ luaopen_curses(lua_State *L)
 		{"filter",	l_filter},
 		{"ripoffline",	l_ripoffline},
 		{"COLOR_PAIR",	l_COLOR_PAIR},
+		{"PAIR_NUMBER", l_PAIR_NUMBER},
 		{NULL,		NULL}
 	};
 
