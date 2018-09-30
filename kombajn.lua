@@ -55,7 +55,12 @@ begy, begx = stdscr:getbegyx()
 maxy, maxx = stdscr:getmaxyx()
 cury, curx = stdscr:getyx()
 
+key = 0
+
 repeat
+	curses.border(string.byte('1'), string.byte('2'), string.byte('3'), string.byte('4'), string.byte('5'), string.byte('6'), string.byte('7'), string.byte('8'))
+	stdscr:wmove(maxy - 1, 0)
+	print("key = " .. key .. " is_keypad=" .. tostring(stdscr:is_keypad()) .. "   ")
 	stdscr:wmove(1, 0)
 	print("begy=" .. begy .. ", begx=" .. begx .. ", maxy=" .. maxy .. ", maxx=" .. maxx .. ", cury=" .. cury .. " curx=" .. curx .. '\n')
 	curses.addbytes("BYTE$", 5)
@@ -75,7 +80,7 @@ repeat
 
 	stdscr:wmove(cury, curx)
 
-	local key = stdscr:wgetch()
+	key = stdscr:wgetch()
 
 	if key == curses.KEY_LEFT then
 		if curx > begx then
@@ -115,11 +120,6 @@ repeat
 		print(string.format("%c", key))
 		cury, curx = stdscr:getyx()
 	end
-
-	stdscr:wmove(maxy - 1, 0)
-	print("key = " .. key .. " is_keypad=" .. tostring(stdscr:is_keypad()) .. "   ")
-	stdscr:wmove(cury, curx)
-
 until key == curses.KEY_F1
 
 curses.endwin()
