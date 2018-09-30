@@ -646,8 +646,8 @@ lud_WINDOW___gc(lua_State *L) /* [-1, +0, v] */
 
 	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
 
-	/* Never delete stdscr */
-	if (uw->win && uw->win != stdscr) {
+	/* Never delete stdscr and curscr */
+	if (uw->win && uw->win != stdscr && uw->win != curscr) {
 		rv = delwin(uw->win);
 		if (rv != OK)
 			luaL_error(L, "delwin(%p)", uw->win);
@@ -659,6 +659,60 @@ lud_WINDOW___gc(lua_State *L) /* [-1, +0, v] */
 	uw->name = NULL;
 
 	return 0;
+}
+
+int
+curses___index(lua_State *L)
+{
+	struct lud_WINDOW *uw;
+	WINDOW *win;
+
+	/* Argument 1 is self, skip */
+	const char *__index = luaL_checkstring(L, 2);
+
+	if (strcmp(__index, "curscr") == 0) {
+		uw = (struct lud_WINDOW *)lua_newuserdata(L, sizeof(*uw));
+
+		/* Zero uw in case of potential errors and passing it to g/c */
+		memset(uw, 0, sizeof(*uw));
+
+		luaL_getmetatable(L, "curses:window");
+		lua_setmetatable(L, -2);
+
+		uw->win = curscr;
+		uw->name = strdup("curscr");
+		if (uw->name == NULL)
+			luaL_error(L, "strdup()");
+	} else if (strcmp(__index, "stdscr") == 0) {
+		uw = (struct lud_WINDOW *)lua_newuserdata(L, sizeof(*uw));
+
+		/* Zero uw in case of potential errors and passing it to g/c */
+		memset(uw, 0, sizeof(*uw));
+
+		luaL_getmetatable(L, "curses:window");
+		lua_setmetatable(L, -2);
+
+		uw->win = stdscr;
+		uw->name = strdup("stdscr");
+		if (uw->name == NULL)
+			luaL_error(L, "strdup()");
+	} else if (strcmp(__index, "COLS") == 0) {
+		lua_pushinteger(L, COLS);
+	} else if (strcmp(__index, "LINES") == 0) {
+		lua_pushinteger(L, LINES);
+	} else if (strcmp(__index, "COLORS") == 0) {
+		lua_pushinteger(L, COLORS);
+	} else if (strcmp(__index, "COLOR_PAIRS") == 0) {
+		lua_pushinteger(L, COLOR_PAIRS);
+	} else if (strcmp(__index, "ESCDELAY") == 0) {
+		lua_pushinteger(L, ESCDELAY);
+	} else if (strcmp(__index, "TABSIZE") == 0) {
+		lua_pushinteger(L, TABSIZE);
+	} else {
+		luaL_error(L, "Type cannot be indexed");
+	}
+
+	return 1;
 }
 
 LUALIB_API int
@@ -710,6 +764,12 @@ luaopen_curses(lua_State *L)
 
 	/* Put all curses(3) routines to a shared table with constants. */
 	luaL_newlib(L, fns);
+
+	/* Add a metatable with a __index routine */
+	luaL_newmetatable(L, "curses:variables");
+	lua_pushcfunction(L, curses___index);
+	lua_setfield(L, -2, "__index");
+	lua_setmetatable(L, -2);
 
 	/* Symbols returned in keypad mode */
 	register_constant(L, KEY_MIN);
