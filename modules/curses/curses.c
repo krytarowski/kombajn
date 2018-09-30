@@ -588,6 +588,51 @@ l_getch(lua_State *L) /* [-0, +1, v] */
 }
 
 int
+l_getnstr(lua_State *L) /* [-1, +1, v] */
+{
+	int n;
+	char *buffer;
+	int rv;
+
+	n = luaL_checkinteger(L, 1);
+	if (n <= 0)
+		luaL_error(L, "Size cannot be non-positive");
+
+	buffer = lua_newuserdata(L, n);
+
+	memset(buffer, 0, sizeof(buffer));
+
+	rv = getnstr(buffer, n);
+
+	if (rv == ERR)
+		luaL_error(L, "getnstr()");
+
+	lua_pushstring(L, buffer);
+
+	return 1;
+}
+
+int
+l_getstr(lua_State *L) /* [-0, +1, v] */
+{
+	char *buffer;
+	int rv;
+
+	buffer = lua_newuserdata(L, LUAL_BUFFERSIZE);
+
+	memset(buffer, 0, LUAL_BUFFERSIZE);
+
+	rv = getstr(buffer);
+
+	if (rv == ERR)
+		luaL_error(L, "getstr()");
+
+	lua_pushstring(L, buffer);
+
+	return 1;
+}
+
+int
 l_initscr(lua_State *L) /* [-0, +1, v] */
 {
 	struct lud_WINDOW *uw;
@@ -1149,6 +1194,8 @@ luaopen_curses(lua_State *L)
 		{"erase",	l_erase},
 		{"filter",	l_filter},
 		{"getch",	l_getch},
+		{"getstr",	l_getstr},
+		{"getnstr",	l_getnstr},
 		{"initscr",	l_initscr},
 		{"newwin",	l_newwin},
 		{"nocbreak",	l_nocbreak},
