@@ -110,228 +110,6 @@ struct lud_WINDOW {
 };
 
 int
-l_initscr(lua_State *L) /* [-0, +1, v] */
-{
-	struct lud_WINDOW *uw;
-	WINDOW *win;
-
-	win = initscr();
-
-	if (win == NULL)
-		luaL_error(L, "initscr()");
-
-	uw = (struct lud_WINDOW *)lua_newuserdata(L, sizeof(*uw));
-
-	/* Zero uw in case of potential errors and passing it to g/c */
-	memset(uw, 0, sizeof(*uw));
-
-	luaL_getmetatable(L, "curses:window");
-	lua_setmetatable(L, -2);
-
-	uw->win = win;
-	uw->name = strdup("stdscr");
-	if (uw->name == NULL)
-		luaL_error(L, "strdup()");
-
-	return 1;
-}
-
-int
-l_endwin(lua_State *L) /* [-0, +0, v] */
-{
-	int rv;
-
-	rv = endwin();
-
-	if (rv != OK)
-		luaL_error(L, "endwin()");
-
-	return 0;
-}
-
-int
-l_cbreak(lua_State *L) /* [-0, +0, v] */
-{
-	int rv;
-
-	rv = cbreak();
-
-	if (rv != OK)
-		luaL_error(L, "cbreak()");
-
-	return 0;
-}
-
-int
-l_nocbreak(lua_State *L) /* [-0, +0, v] */
-{
-	int rv;
-
-	rv = nocbreak();
-
-	if (rv != OK)
-		luaL_error(L, "nocbreak()");
-
-	return 0;
-}
-
-int
-l_echo(lua_State *L) /* [-0, +0, v] */
-{
-	int rv;
-
-	rv = echo();
-
-	if (rv != OK)
-		luaL_error(L, "echo()");
-
-	return 0;
-}
-
-int
-l_noecho(lua_State *L) /* [-0, +0, v] */
-{
-	int rv;
-
-	rv = noecho();
-
-	if (rv != OK)
-		luaL_error(L, "noecho()");
-
-	return 0;
-}
-
-int
-l_raw(lua_State *L) /* [-0, +0, v] */
-{
-	int rv;
-
-	rv = raw();
-
-	if (rv != OK)
-		luaL_error(L, "raw()");
-
-	return 0;
-}
-
-int
-l_noraw(lua_State *L) /* [-0, +0, v] */
-{
-	int rv;
-
-	rv = noraw();
-
-	if (rv != OK)
-		luaL_error(L, "noraw()");
-
-	return 0;
-}
-
-int
-l_start_color(lua_State *L) /* [-0, +0, v] */
-{
-	int rv;
-
-	rv = start_color();
-
-	if (rv != OK)
-		luaL_error(L, "start_color()");
-
-	return 0;
-}
-
-int
-l_newwin(lua_State *L) /* [-5, +1, -] */
-{
-	struct lud_WINDOW *uw;
-	const char *name;
-	int lines, cols, begin_y, begin_x;
-
-	name = luaL_checkstring(L, 1);
-	if (name == NULL)
-		luaL_error(L, "name cannot be unset");
-
-	lines = luaL_checkinteger(L, 2);
-	cols = luaL_checkinteger(L, 3);
-	begin_y = luaL_checkinteger(L, 4);
-	begin_x = luaL_checkinteger(L, 5);
-	uw = (struct lud_WINDOW *)lua_newuserdata(L, sizeof(*uw));
-
-	/* Zero uw in case of potential errors and passing it to g/c */
-	memset(uw, 0, sizeof(*uw));
-
-	luaL_getmetatable(L, "curses:window");
-	lua_setmetatable(L, -2);
-
-	uw->win = newwin(lines, cols, begin_y, begin_x);
-	if (uw->win == NULL)
-		luaL_error(L, "newwin()");
-	uw->name = strdup(name);
-	if (uw->name == NULL)
-		luaL_error(L, "strdup()");
-
-	return 1;
-}
-
-int
-l_border(lua_State *L) /* [-8, +0, v] */
-{
-	int rv;
-	chtype ls, rs, ts, bs, tl, tr, bl, br;
-
-	ls = luaL_checkinteger(L, 1);
-	rs = luaL_checkinteger(L, 2);
-	ts = luaL_checkinteger(L, 3);
-	bs = luaL_checkinteger(L, 4);
-	tl = luaL_checkinteger(L, 5);
-	tr = luaL_checkinteger(L, 6);
-	bl = luaL_checkinteger(L, 7);
-	br = luaL_checkinteger(L, 8);
-
-	rv = border(ls, rs, ts, bs, tl, tr, bl, br);
-	if (rv != OK)
-		luaL_error(L, "border()");
-
-	return 0;
-}
-
-int
-l_use_env(lua_State *L) /* [-1, +0, v] */
-{
-	bool value;
-
-	value = lua_toboolean(L, 1);
-
-	use_env(value);
-
-	return 0;
-}
-
-int
-l_filter(lua_State *L) /* [-0, +0, v] */
-{
-
-	filter();
-
-	return 0;
-}
-
-int
-l_ripoffline(lua_State *L) /* [-0, +0, v] */
-{
-#if 0 // not yet
-	int rv;
-
-	rv = ripoffline();
-
-	if (rv != OK)
-		luaL_error(L, "ripoffline()");
-#endif
-
-	return 0;
-}
-
-int
 l_COLOR_PAIR(lua_State *L) /* [-1, +1, v] */
 {
 	int n;
@@ -615,6 +393,41 @@ l_bkgdset(lua_State *L) /* [-1, +0, v] */
 }
 
 int
+l_border(lua_State *L) /* [-8, +0, v] */
+{
+	int rv;
+	chtype ls, rs, ts, bs, tl, tr, bl, br;
+
+	ls = luaL_checkinteger(L, 1);
+	rs = luaL_checkinteger(L, 2);
+	ts = luaL_checkinteger(L, 3);
+	bs = luaL_checkinteger(L, 4);
+	tl = luaL_checkinteger(L, 5);
+	tr = luaL_checkinteger(L, 6);
+	bl = luaL_checkinteger(L, 7);
+	br = luaL_checkinteger(L, 8);
+
+	rv = border(ls, rs, ts, bs, tl, tr, bl, br);
+	if (rv != OK)
+		luaL_error(L, "border()");
+
+	return 0;
+}
+
+int
+l_cbreak(lua_State *L) /* [-0, +0, v] */
+{
+	int rv;
+
+	rv = cbreak();
+
+	if (rv != OK)
+		luaL_error(L, "cbreak()");
+
+	return 0;
+}
+
+int
 l_clear(lua_State *L) /* [-0, +0, v] */
 {
 	int rv;
@@ -696,6 +509,19 @@ l_deleteln(lua_State *L) /* [-0, +0, v] */
 }
 
 int
+l_echo(lua_State *L) /* [-0, +0, v] */
+{
+	int rv;
+
+	rv = echo();
+
+	if (rv != OK)
+		luaL_error(L, "echo()");
+
+	return 0;
+}
+
+int
 l_echochar(lua_State *L) /* [-1, +0, v] */
 {
 	int chtype;
@@ -707,6 +533,19 @@ l_echochar(lua_State *L) /* [-1, +0, v] */
 
 	if (rv != OK)
 		luaL_error(L, "echochar()");
+
+	return 0;
+}
+
+int
+l_endwin(lua_State *L) /* [-0, +0, v] */
+{
+	int rv;
+
+	rv = endwin();
+
+	if (rv != OK)
+		luaL_error(L, "endwin()");
 
 	return 0;
 }
@@ -725,6 +564,15 @@ l_erase(lua_State *L) /* [-0, +0, v] */
 }
 
 int
+l_filter(lua_State *L) /* [-0, +0, -] */
+{
+
+	filter();
+
+	return 0;
+}
+
+int
 l_getch(lua_State *L) /* [-0, +1, v] */
 {
 	int rv;
@@ -735,6 +583,241 @@ l_getch(lua_State *L) /* [-0, +1, v] */
 		luaL_error(L, "getch()");
 
 	lua_pushinteger(L, rv);
+
+	return 1;
+}
+
+int
+l_initscr(lua_State *L) /* [-0, +1, v] */
+{
+	struct lud_WINDOW *uw;
+	WINDOW *win;
+
+	win = initscr();
+
+	if (win == NULL)
+		luaL_error(L, "initscr()");
+
+	uw = (struct lud_WINDOW *)lua_newuserdata(L, sizeof(*uw));
+
+	/* Zero uw in case of potential errors and passing it to g/c */
+	memset(uw, 0, sizeof(*uw));
+
+	luaL_getmetatable(L, "curses:window");
+	lua_setmetatable(L, -2);
+
+	uw->win = win;
+	uw->name = strdup("stdscr");
+	if (uw->name == NULL)
+		luaL_error(L, "strdup()");
+
+	return 1;
+}
+
+int
+l_newwin(lua_State *L) /* [-5, +1, -] */
+{
+	struct lud_WINDOW *uw;
+	const char *name;
+	int lines, cols, begin_y, begin_x;
+
+	name = luaL_checkstring(L, 1);
+	if (name == NULL)
+		luaL_error(L, "name cannot be unset");
+
+	lines = luaL_checkinteger(L, 2);
+	cols = luaL_checkinteger(L, 3);
+	begin_y = luaL_checkinteger(L, 4);
+	begin_x = luaL_checkinteger(L, 5);
+	uw = (struct lud_WINDOW *)lua_newuserdata(L, sizeof(*uw));
+
+	/* Zero uw in case of potential errors and passing it to g/c */
+	memset(uw, 0, sizeof(*uw));
+
+	luaL_getmetatable(L, "curses:window");
+	lua_setmetatable(L, -2);
+
+	uw->win = newwin(lines, cols, begin_y, begin_x);
+	if (uw->win == NULL)
+		luaL_error(L, "newwin()");
+	uw->name = strdup(name);
+	if (uw->name == NULL)
+		luaL_error(L, "strdup()");
+
+	return 1;
+}
+
+int
+l_nocbreak(lua_State *L) /* [-0, +0, v] */
+{
+	int rv;
+
+	rv = nocbreak();
+
+	if (rv != OK)
+		luaL_error(L, "nocbreak()");
+
+	return 0;
+}
+
+int
+l_noecho(lua_State *L) /* [-0, +0, v] */
+{
+	int rv;
+
+	rv = noecho();
+
+	if (rv != OK)
+		luaL_error(L, "noecho()");
+
+	return 0;
+}
+
+int
+l_noraw(lua_State *L) /* [-0, +0, v] */
+{
+	int rv;
+
+	rv = noraw();
+
+	if (rv != OK)
+		luaL_error(L, "noraw()");
+
+	return 0;
+}
+
+int
+l_raw(lua_State *L) /* [-0, +0, v] */
+{
+	int rv;
+
+	rv = raw();
+
+	if (rv != OK)
+		luaL_error(L, "raw()");
+
+	return 0;
+}
+
+int
+l_ripoffline(lua_State *L) /* [-0, +0, v] */
+{
+#if 0 // not yet
+	int rv;
+
+	rv = ripoffline();
+
+	if (rv != OK)
+		luaL_error(L, "ripoffline()");
+#endif
+
+	return 0;
+}
+
+int
+l_start_color(lua_State *L) /* [-0, +0, v] */
+{
+	int rv;
+
+	rv = start_color();
+
+	if (rv != OK)
+		luaL_error(L, "start_color()");
+
+	return 0;
+}
+
+int
+l_use_env(lua_State *L) /* [-1, +0, v] */
+{
+	bool value;
+
+	value = lua_toboolean(L, 1);
+
+	use_env(value);
+
+	return 0;
+}
+
+int
+lud_WINDOW_box(lua_State *L) /* [-3, +0, v] */
+{
+	int rv;
+	chtype vertical, horizontal;
+	struct lud_WINDOW *uw;
+
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+
+	vertical = luaL_checkinteger(L, 2);
+	horizontal = luaL_checkinteger(L, 3);
+
+	rv = box(uw->win, vertical, horizontal);
+
+	if (rv != OK)
+		luaL_error(L, "box()");
+
+	return rv;
+}
+
+int
+lud_WINDOW_getbegyx(lua_State *L) /* [-1, +2, v] */
+{
+	int y, x;
+	struct lud_WINDOW *uw;
+
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+
+	getbegyx(uw->win, y, x);
+
+	lua_pushinteger(L, y);
+	lua_pushinteger(L, x);
+
+	return 2;
+}
+
+int
+lud_WINDOW_getmaxyx(lua_State *L) /* [-1, +2, v] */
+{
+	int y, x;
+	struct lud_WINDOW *uw;
+
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+
+	getmaxyx(uw->win, y, x);
+
+	lua_pushinteger(L, y);
+	lua_pushinteger(L, x);
+
+	return 2;
+}
+
+int
+lud_WINDOW_getyx(lua_State *L) /* [-1, +2, v] */
+{
+	int y, x;
+	struct lud_WINDOW *uw;
+
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+
+	getyx(uw->win, y, x);
+
+	lua_pushinteger(L, y);
+	lua_pushinteger(L, x);
+
+	return 2;
+}
+
+int
+lud_WINDOW_is_keypad(lua_State *L) /* [-1, +1, v] */
+{
+	struct lud_WINDOW *uw;
+	bool flag;
+
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+
+	flag = is_keypad(uw->win);
+
+	lua_pushboolean(L, flag ? 1 : 0);
 
 	return 1;
 }
@@ -758,18 +841,82 @@ lud_WINDOW_keypad(lua_State *L) /* [-2, +0, v] */
 }
 
 int
-lud_WINDOW_is_keypad(lua_State *L) /* [-1, +1, v] */
+lud_WINDOW_wattroff(lua_State *L) /* [-2, +0, v] */
 {
+	int rv;
+	int attr;
 	struct lud_WINDOW *uw;
-	bool flag;
+
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+	attr = luaL_checkinteger(L, 2);
+
+	rv = wattroff(uw->win, attr);
+
+	if (rv != OK)
+		luaL_error(L, "wattroff()");
+
+	return 0;
+}
+
+int
+lud_WINDOW_wattron(lua_State *L) /* [-2, +0, v] */
+{
+	int rv;
+	int attr;
+	struct lud_WINDOW *uw;
+
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+	attr = luaL_checkinteger(L, 2);
+
+	rv = wattron(uw->win, attr);
+
+	if (rv != OK)
+		luaL_error(L, "wattron()");
+
+	return 0;
+}
+
+int
+lud_WINDOW_wattrset(lua_State *L) /* [-2, +0, v] */
+{
+	int rv;
+	int attr;
+	struct lud_WINDOW *uw;
+
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+	attr = luaL_checkinteger(L, 2);
+
+	rv = wattrset(uw->win, attr);
+
+	if (rv != OK)
+		luaL_error(L, "wattrset()");
+
+	return 0;
+}
+
+int
+lud_WINDOW_wborder(lua_State *L) /* [-9, +0, v] */
+{
+	int rv;
+	chtype ls, rs, ts, bs, tl, tr, bl, br;
+	struct lud_WINDOW *uw;
 
 	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
 
-	flag = is_keypad(uw->win);
+	ls = luaL_checkinteger(L, 2);
+	rs = luaL_checkinteger(L, 3);
+	ts = luaL_checkinteger(L, 4);
+	bs = luaL_checkinteger(L, 5);
+	tl = luaL_checkinteger(L, 6);
+	tr = luaL_checkinteger(L, 7);
+	bl = luaL_checkinteger(L, 8);
+	br = luaL_checkinteger(L, 9);
 
-	lua_pushboolean(L, flag ? 1 : 0);
+	rv = wborder(uw->win, ls, rs, ts, bs, tl, tr, bl, br);
+	if (rv != OK)
+		luaL_error(L, "wborder()");
 
-	return 1;
+	return 0;
 }
 
 int
@@ -788,6 +935,25 @@ lud_WINDOW_wgetch(lua_State *L) /* [-1, +1, v] */
 	lua_pushinteger(L, rv);
 
 	return 1;
+}
+
+int
+lud_WINDOW_wmove(lua_State *L) /* [-3, +0, v] */
+{
+	int rv;
+	int y, x;
+	struct lud_WINDOW *uw;
+
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+	y = luaL_checkinteger(L, 2);
+	x = luaL_checkinteger(L, 3);
+
+	rv = wmove(uw->win, y, x);
+
+	if (rv != OK)
+		luaL_error(L, "wmove()");
+
+	return 0;
 }
 
 int
@@ -844,127 +1010,6 @@ lud_WINDOW_wprintw(lua_State *L) /* [-N, +0, v] */
 }
 
 int
-lud_WINDOW_getbegyx(lua_State *L) /* [-1, +2, v] */
-{
-	int y, x;
-	struct lud_WINDOW *uw;
-
-	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
-
-	getbegyx(uw->win, y, x);
-
-	lua_pushinteger(L, y);
-	lua_pushinteger(L, x);
-
-	return 2;
-}
-
-int
-lud_WINDOW_getmaxyx(lua_State *L) /* [-1, +2, v] */
-{
-	int y, x;
-	struct lud_WINDOW *uw;
-
-	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
-
-	getmaxyx(uw->win, y, x);
-
-	lua_pushinteger(L, y);
-	lua_pushinteger(L, x);
-
-	return 2;
-}
-
-int
-lud_WINDOW_getyx(lua_State *L) /* [-1, +2, v] */
-{
-	int y, x;
-	struct lud_WINDOW *uw;
-
-	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
-
-	getyx(uw->win, y, x);
-
-	lua_pushinteger(L, y);
-	lua_pushinteger(L, x);
-
-	return 2;
-}
-
-int
-lud_WINDOW_wattron(lua_State *L) /* [-2, +0, v] */
-{
-	int rv;
-	int attr;
-	struct lud_WINDOW *uw;
-
-	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
-	attr = luaL_checkinteger(L, 2);
-
-	rv = wattron(uw->win, attr);
-
-	if (rv != OK)
-		luaL_error(L, "wattron()");
-
-	return 0;
-}
-
-int
-lud_WINDOW_wattroff(lua_State *L) /* [-2, +0, v] */
-{
-	int rv;
-	int attr;
-	struct lud_WINDOW *uw;
-
-	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
-	attr = luaL_checkinteger(L, 2);
-
-	rv = wattroff(uw->win, attr);
-
-	if (rv != OK)
-		luaL_error(L, "wattroff()");
-
-	return 0;
-}
-
-int
-lud_WINDOW_wattrset(lua_State *L) /* [-2, +0, v] */
-{
-	int rv;
-	int attr;
-	struct lud_WINDOW *uw;
-
-	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
-	attr = luaL_checkinteger(L, 2);
-
-	rv = wattrset(uw->win, attr);
-
-	if (rv != OK)
-		luaL_error(L, "wattrset()");
-
-	return 0;
-}
-
-int
-lud_WINDOW_wmove(lua_State *L) /* [-3, +0, v] */
-{
-	int rv;
-	int y, x;
-	struct lud_WINDOW *uw;
-
-	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
-	y = luaL_checkinteger(L, 2);
-	x = luaL_checkinteger(L, 3);
-
-	rv = wmove(uw->win, y, x);
-
-	if (rv != OK)
-		luaL_error(L, "wmove()");
-
-	return 0;
-}
-
-int
 lud_WINDOW_wrefresh(lua_State *L) /* [-1, +0, v] */
 {
 	int rv;
@@ -978,63 +1023,6 @@ lud_WINDOW_wrefresh(lua_State *L) /* [-1, +0, v] */
 		luaL_error(L, "wrefresh()");
 
 	return 0;
-}
-
-int
-lud_WINDOW_box(lua_State *L) /* [-3, +0, v] */
-{
-	int rv;
-	chtype vertical, horizontal;
-	struct lud_WINDOW *uw;
-
-	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
-
-	vertical = luaL_checkinteger(L, 2);
-	horizontal = luaL_checkinteger(L, 3);
-
-	rv = box(uw->win, vertical, horizontal);
-
-	if (rv != OK)
-		luaL_error(L, "box()");
-
-	return rv;
-}
-
-int
-lud_WINDOW_wborder(lua_State *L) /* [-9, +0, v] */
-{
-	int rv;
-	chtype ls, rs, ts, bs, tl, tr, bl, br;
-	struct lud_WINDOW *uw;
-
-	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
-
-	ls = luaL_checkinteger(L, 2);
-	rs = luaL_checkinteger(L, 3);
-	ts = luaL_checkinteger(L, 4);
-	bs = luaL_checkinteger(L, 5);
-	tl = luaL_checkinteger(L, 6);
-	tr = luaL_checkinteger(L, 7);
-	bl = luaL_checkinteger(L, 8);
-	br = luaL_checkinteger(L, 9);
-
-	rv = wborder(uw->win, ls, rs, ts, bs, tl, tr, bl, br);
-	if (rv != OK)
-		luaL_error(L, "wborder()");
-
-	return 0;
-}
-
-int
-lud_WINDOW___tostring(lua_State *L) /* [-1, +1, v] */
-{
-	struct lud_WINDOW *uw;
-	const char *name;
-
-	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
-	lua_pushstring(L, uw->name);
-
-	return 1;
 }
 
 int
@@ -1058,6 +1046,18 @@ lud_WINDOW___gc(lua_State *L) /* [-1, +0, v] */
 	uw->name = NULL;
 
 	return 0;
+}
+
+int
+lud_WINDOW___tostring(lua_State *L) /* [-1, +1, v] */
+{
+	struct lud_WINDOW *uw;
+	const char *name;
+
+	uw = (struct lud_WINDOW *)luaL_checkudata(L, 1, "curses:window");
+	lua_pushstring(L, uw->name);
+
+	return 1;
 }
 
 int
@@ -1118,20 +1118,6 @@ LUALIB_API int
 luaopen_curses(lua_State *L)
 {
 	static luaL_Reg fns[] = {
-		{"initscr",	l_initscr},
-		{"endwin",	l_endwin},
-		{"cbreak",	l_cbreak},
-		{"nocbreak",	l_nocbreak},
-		{"echo",	l_echo},
-		{"noecho",	l_noecho},
-		{"raw",		l_raw},
-		{"noraw",	l_noraw},
-		{"start_color",	l_start_color},
-		{"newwin",	l_newwin},
-		{"border",	l_border},
-		{"use_env",	l_use_env},
-		{"filter",	l_filter},
-		{"ripoffline",	l_ripoffline},
 		{"COLOR_PAIR",	l_COLOR_PAIR},
 		{"PAIR_NUMBER", l_PAIR_NUMBER},
 		{"addbytes",	l_addbytes},
@@ -1149,35 +1135,49 @@ luaopen_curses(lua_State *L)
 		{"attrset",	l_attrset},
 		{"bkgd",	l_bkgd},
 		{"bkgdset",	l_bkgdset},
+		{"border",	l_border},
+		{"cbreak",	l_cbreak},
 		{"clear",	l_clear},
 		{"clrtobot",	l_clrtobot},
 		{"clrtoeol",	l_clrtoeol},
 		{"color_set",	l_color_set},
 		{"delch",	l_delch},
 		{"deleteln",	l_deleteln},
+		{"echo",	l_echo},
 		{"echochar",	l_echochar},
+		{"endwin",	l_endwin},
 		{"erase",	l_erase},
+		{"filter",	l_filter},
 		{"getch",	l_getch},
+		{"initscr",	l_initscr},
+		{"newwin",	l_newwin},
+		{"nocbreak",	l_nocbreak},
+		{"noecho",	l_noecho},
+		{"noraw",	l_noraw},
+		{"raw",		l_raw},
+		{"ripoffline",	l_ripoffline},
+		{"start_color",	l_start_color},
+		{"use_env",	l_use_env},
 		{NULL,		NULL}
 	};
 
 	static luaL_Reg lud_WINDOW_fns[] = {
-		{"keypad",	lud_WINDOW_keypad},
-		{"is_keypad",	lud_WINDOW_is_keypad},
-		{"wgetch",	lud_WINDOW_wgetch},
-		{"wprintw",	lud_WINDOW_wprintw},
+		{"box",		lud_WINDOW_box},
 		{"getbegyx",	lud_WINDOW_getbegyx},
 		{"getmaxyx",	lud_WINDOW_getmaxyx},
 		{"getyx",	lud_WINDOW_getyx},
-		{"wattron",	lud_WINDOW_wattron},
+		{"is_keypad",	lud_WINDOW_is_keypad},
+		{"keypad",	lud_WINDOW_keypad},
 		{"wattroff",	lud_WINDOW_wattroff},
+		{"wattron",	lud_WINDOW_wattron},
 		{"wattrset",	lud_WINDOW_wattrset},
-		{"wmove",	lud_WINDOW_wmove},
-		{"wrefresh",	lud_WINDOW_wrefresh},
-		{"box",		lud_WINDOW_box},
 		{"wborder",	lud_WINDOW_wborder},
-		{"__tostring",	lud_WINDOW___tostring},
+		{"wgetch",	lud_WINDOW_wgetch},
+		{"wmove",	lud_WINDOW_wmove},
+		{"wprintw",	lud_WINDOW_wprintw},
+		{"wrefresh",	lud_WINDOW_wrefresh},
 		{"__gc",	lud_WINDOW___gc},
+		{"__tostring",	lud_WINDOW___tostring},
 		{NULL,		NULL}
 	};
 
