@@ -655,6 +655,22 @@ l_clrtoeol(lua_State *L) /* [-0, +0, v] */
 }
 
 int
+l_color_set(lua_State *L) /* [-1, +0, v] */
+{
+	short pair;
+	int rv;
+
+	pair = luaL_checkinteger(L, 1);
+
+	rv = color_set(pair, NULL);
+
+	if (rv != OK)
+		luaL_error(L, "color_set()");
+
+	return 0;
+}
+
+int
 lud_WINDOW_keypad(lua_State *L) /* [-2, +0, v] */
 {
 	struct lud_WINDOW *uw;
@@ -1067,6 +1083,7 @@ luaopen_curses(lua_State *L)
 		{"clear",	l_clear},
 		{"clrtobot",	l_clrtobot},
 		{"clrtoeol",	l_clrtoeol},
+		{"color_set",	l_color_set},
 		{NULL,		NULL}
 	};
 
