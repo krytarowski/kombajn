@@ -37,6 +37,9 @@
 #define register_constant(L,v)	\
 	(lua_pushstring(L, #v), lua_pushinteger(L, v), lua_rawset(L, -3))
 
+#define register_pointer(L,v)	\
+	(lua_pushstring(L, #v), lua_pushlightuserdata(L, v), lua_rawset(L, -3))
+
 #define KEY_F1 KEY_F(1)
 #define KEY_F2 KEY_F(2)
 #define KEY_F3 KEY_F(3)
@@ -49,6 +52,57 @@
 #define KEY_F10 KEY_F(10)
 #define KEY_F11 KEY_F(11)
 #define KEY_F12 KEY_F(12)
+#define KEY_F13 KEY_F(13)
+#define KEY_F14 KEY_F(14)
+#define KEY_F15 KEY_F(15)
+#define KEY_F16 KEY_F(16)
+#define KEY_F17 KEY_F(17)
+#define KEY_F18 KEY_F(18)
+#define KEY_F19 KEY_F(19)
+#define KEY_F20 KEY_F(20)
+#define KEY_F21 KEY_F(21)
+#define KEY_F22 KEY_F(22)
+#define KEY_F23 KEY_F(23)
+#define KEY_F24 KEY_F(24)
+#define KEY_F25 KEY_F(25)
+#define KEY_F26 KEY_F(26)
+#define KEY_F27 KEY_F(27)
+#define KEY_F28 KEY_F(28)
+#define KEY_F29 KEY_F(29)
+#define KEY_F30 KEY_F(30)
+#define KEY_F31 KEY_F(31)
+#define KEY_F32 KEY_F(32)
+#define KEY_F33 KEY_F(33)
+#define KEY_F34 KEY_F(34)
+#define KEY_F35 KEY_F(35)
+#define KEY_F36 KEY_F(36)
+#define KEY_F37 KEY_F(37)
+#define KEY_F38 KEY_F(38)
+#define KEY_F39 KEY_F(39)
+#define KEY_F40 KEY_F(40)
+#define KEY_F41 KEY_F(41)
+#define KEY_F42 KEY_F(42)
+#define KEY_F43 KEY_F(43)
+#define KEY_F44 KEY_F(44)
+#define KEY_F45 KEY_F(45)
+#define KEY_F46 KEY_F(46)
+#define KEY_F47 KEY_F(47)
+#define KEY_F48 KEY_F(48)
+#define KEY_F49 KEY_F(49)
+#define KEY_F50 KEY_F(50)
+#define KEY_F51 KEY_F(51)
+#define KEY_F52 KEY_F(52)
+#define KEY_F53 KEY_F(53)
+#define KEY_F54 KEY_F(54)
+#define KEY_F55 KEY_F(55)
+#define KEY_F56 KEY_F(56)
+#define KEY_F57 KEY_F(57)
+#define KEY_F58 KEY_F(58)
+#define KEY_F59 KEY_F(59)
+#define KEY_F60 KEY_F(60)
+#define KEY_F61 KEY_F(61)
+#define KEY_F62 KEY_F(62)
+#define KEY_F63 KEY_F(63)
 
 struct lud_WINDOW {
 	WINDOW *win;
@@ -260,6 +314,33 @@ l_filter(lua_State *L) /* [-0, +0, v] */
 	filter();
 
 	return 0;
+}
+
+int
+l_ripoffline(lua_State *L) /* [-0, +0, v] */
+{
+#if 0 // not yet
+	int rv;
+
+	rv = ripoffline();
+
+	if (rv != OK)
+		luaL_error(L, "ripoffline()");
+#endif
+
+	return 0;
+}
+
+int
+l_COLOR_PAIR(lua_State *L) /* [-1, +1, v] */
+{
+	int n;
+
+	n = luaL_checkinteger(L, 1);
+
+	lua_pushinteger(L, COLOR_PAIR(n));
+
+	return 1;
 }
 
 int
@@ -597,6 +678,8 @@ luaopen_curses(lua_State *L)
 		{"border",	l_border},
 		{"use_env",	l_use_env},
 		{"filter",	l_filter},
+		{"ripoffline",	l_ripoffline},
+		{"COLOR_PAIR",	l_COLOR_PAIR},
 		{NULL,		NULL}
 	};
 
@@ -650,6 +733,57 @@ luaopen_curses(lua_State *L)
 	register_constant(L, KEY_F10);
 	register_constant(L, KEY_F11);
 	register_constant(L, KEY_F12);
+	register_constant(L, KEY_F13);
+	register_constant(L, KEY_F14);
+	register_constant(L, KEY_F15);
+	register_constant(L, KEY_F16);
+	register_constant(L, KEY_F17);
+	register_constant(L, KEY_F18);
+	register_constant(L, KEY_F19);
+	register_constant(L, KEY_F20);
+	register_constant(L, KEY_F21);
+	register_constant(L, KEY_F22);
+	register_constant(L, KEY_F23);
+	register_constant(L, KEY_F24);
+	register_constant(L, KEY_F25);
+	register_constant(L, KEY_F26);
+	register_constant(L, KEY_F27);
+	register_constant(L, KEY_F28);
+	register_constant(L, KEY_F29);
+	register_constant(L, KEY_F30);
+	register_constant(L, KEY_F31);
+	register_constant(L, KEY_F32);
+	register_constant(L, KEY_F33);
+	register_constant(L, KEY_F34);
+	register_constant(L, KEY_F35);
+	register_constant(L, KEY_F36);
+	register_constant(L, KEY_F37);
+	register_constant(L, KEY_F38);
+	register_constant(L, KEY_F39);
+	register_constant(L, KEY_F40);
+	register_constant(L, KEY_F41);
+	register_constant(L, KEY_F42);
+	register_constant(L, KEY_F43);
+	register_constant(L, KEY_F44);
+	register_constant(L, KEY_F45);
+	register_constant(L, KEY_F46);
+	register_constant(L, KEY_F47);
+	register_constant(L, KEY_F48);
+	register_constant(L, KEY_F49);
+	register_constant(L, KEY_F50);
+	register_constant(L, KEY_F51);
+	register_constant(L, KEY_F52);
+	register_constant(L, KEY_F53);
+	register_constant(L, KEY_F54);
+	register_constant(L, KEY_F55);
+	register_constant(L, KEY_F56);
+	register_constant(L, KEY_F57);
+	register_constant(L, KEY_F58);
+	register_constant(L, KEY_F59);
+	register_constant(L, KEY_F60);
+	register_constant(L, KEY_F61);
+	register_constant(L, KEY_F62);
+	register_constant(L, KEY_F63);
 
 	register_constant(L, KEY_DL);
 	register_constant(L, KEY_IL);
@@ -754,6 +888,104 @@ luaopen_curses(lua_State *L)
 	register_constant(L, A_ATTRIBUTES);
 	register_constant(L, A_CHARTEXT);
 	register_constant(L, A_COLOR);
+
+	/* Wide character attributes */
+	register_constant(L, WA_ATTRIBUTES);
+	register_constant(L, WA_NORMAL);
+	register_constant(L, WA_STANDOUT);
+	register_constant(L, WA_UNDERLINE);
+	register_constant(L, WA_REVERSE);
+	register_constant(L, WA_BLINK);
+	register_constant(L, WA_DIM);
+	register_constant(L, WA_BOLD);
+	register_constant(L, WA_INVIS);
+	register_constant(L, WA_PROTECT);
+	register_constant(L, WA_ALTCHARSET);
+	register_constant(L, WA_LOW);
+	register_constant(L, WA_TOP);
+	register_constant(L, WA_HORIZONTAL);
+	register_constant(L, WA_VERTICAL);
+	register_constant(L, WA_LEFT);
+	register_constant(L, WA_RIGHT);
+
+	/* Attribute character set definitions */
+	register_constant(L, ACS_RARROW);
+	register_constant(L, ACS_LARROW);
+	register_constant(L, ACS_UARROW);
+	register_constant(L, ACS_DARROW);
+	register_constant(L, ACS_BLOCK);
+	register_constant(L, ACS_DIAMOND);
+	register_constant(L, ACS_CKBOARD);
+	register_constant(L, ACS_DEGREE);
+	register_constant(L, ACS_PLMINUS);
+	register_constant(L, ACS_BOARD);
+	register_constant(L, ACS_LANTERN);
+	register_constant(L, ACS_LRCORNER);
+	register_constant(L, ACS_URCORNER);
+	register_constant(L, ACS_ULCORNER);
+	register_constant(L, ACS_LLCORNER);
+	register_constant(L, ACS_PLUS);
+	register_constant(L, ACS_HLINE);
+	register_constant(L, ACS_S1);
+	register_constant(L, ACS_S9);
+	register_constant(L, ACS_LTEE);
+	register_constant(L, ACS_RTEE);
+	register_constant(L, ACS_BTEE);
+	register_constant(L, ACS_TTEE);
+	register_constant(L, ACS_VLINE);
+	register_constant(L, ACS_BULLET);
+	register_constant(L, ACS_S3);
+	register_constant(L, ACS_S7);
+	register_constant(L, ACS_LEQUAL);
+	register_constant(L, ACS_GEQUAL);
+	register_constant(L, ACS_PI);
+	register_constant(L, ACS_NEQUAL);
+	register_constant(L, ACS_STERLING);
+	register_constant(L, ACS_SBBS);
+	register_constant(L, ACS_BBSS);
+	register_constant(L, ACS_BSSB);
+	register_constant(L, ACS_SSBB);
+	register_constant(L, ACS_SSSS);
+	register_constant(L, ACS_BSBS);
+	register_constant(L, ACS_SSSB);
+	register_constant(L, ACS_SBSS);
+	register_constant(L, ACS_SSBS);
+	register_constant(L, ACS_BSSS);
+	register_constant(L, ACS_SBSB);
+
+	/* Wide alternate character set definitions */
+	register_pointer(L, WACS_RARROW);
+	register_pointer(L, WACS_LARROW);
+	register_pointer(L, WACS_UARROW);
+	register_pointer(L, WACS_DARROW);
+	register_pointer(L, WACS_BLOCK);
+	register_pointer(L, WACS_DIAMOND);
+	register_pointer(L, WACS_CKBOARD);
+	register_pointer(L, WACS_DEGREE);
+	register_pointer(L, WACS_PLMINUS);
+	register_pointer(L, WACS_BOARD);
+	register_pointer(L, WACS_LANTERN);
+	register_pointer(L, WACS_LRCORNER);
+	register_pointer(L, WACS_URCORNER);
+	register_pointer(L, WACS_ULCORNER);
+	register_pointer(L, WACS_LLCORNER);
+	register_pointer(L, WACS_PLUS);
+	register_pointer(L, WACS_HLINE);
+	register_pointer(L, WACS_S1);
+	register_pointer(L, WACS_S9);
+	register_pointer(L, WACS_LTEE);
+	register_pointer(L, WACS_RTEE);
+	register_pointer(L, WACS_BTEE);
+	register_pointer(L, WACS_TTEE);
+	register_pointer(L, WACS_VLINE);
+	register_pointer(L, WACS_BULLET);
+	register_pointer(L, WACS_S3);
+	register_pointer(L, WACS_S7);
+	register_pointer(L, WACS_LEQUAL);
+	register_pointer(L, WACS_GEQUAL);
+	register_pointer(L, WACS_PI);
+	register_pointer(L, WACS_NEQUAL);
+	register_pointer(L, WACS_STERLING);
 
 	/* Color definitions (ANSI color numbers) */
 	register_constant(L, COLOR_BLACK);
