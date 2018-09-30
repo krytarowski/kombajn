@@ -485,6 +485,22 @@ l_attr_get(lua_State *L) /* [-0, +2, v] */
 	lua_pushinteger(L, attr);
 	lua_pushinteger(L, pair);
 
+	return 2;
+}
+
+int
+l_attr_off(lua_State *L) /* [-1, +0, v] */
+{
+	attr_t attr;
+	int rv;
+
+	attr = luaL_checkinteger(L, 1);
+
+	rv = attr_off(attr, NULL);
+
+	if (rv != OK)
+		luaL_error(L, "attr_off()");
+
 	return 0;
 }
 
@@ -887,6 +903,7 @@ luaopen_curses(lua_State *L)
 		{"addnstr",	l_addnstr},
 		{"addstr",	l_addstr},
 		{"attr_get",	l_attr_get},
+		{"attr_off",	l_attr_off},
 		{NULL,		NULL}
 	};
 
