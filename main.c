@@ -51,10 +51,17 @@ main(int argc, char **argv)
 	luaL_openlibs(L);
 
 	lua_getglobal(L, "package");
+
 	lua_getfield(L, -1, "cpath");
 	lua_pushstring(L, ";" KOMBAJNDIR "modules/?/?.so");
 	lua_concat(L, 2);
 	lua_setfield(L, -2, "cpath");
+
+	lua_getfield(L, -1, "path");
+	lua_pushstring(L, ";" KOMBAJNDIR "modules/?/?.lua");
+	lua_concat(L, 2);
+	lua_setfield(L, -2, "path");
+
 	lua_pop(L, 1);
 
 	if ((rv = luaL_loadfile(L, _PATH_KOMBAJN)) != LUA_OK)
