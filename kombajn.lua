@@ -30,6 +30,7 @@ local curses = require('curses')
 local ctype = require('ctype')
 local signal = require('signal')
 local unistd = require('unistd')
+local list = require('list')
 
 local stdscr = curses.initscr()
 
