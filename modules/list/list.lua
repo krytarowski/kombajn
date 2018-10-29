@@ -1,11 +1,16 @@
 list = {}
 
 function list.new()
-	return { _front = nil, _back = nil, _current = nil, _list = nil, _size = 0 }
+	return {
+		_back = nil,
+		_current = nil,
+		_list = nil,
+		_size = 0
+	}
 end
 
 function list.front(l)
-	return l._front
+	return l._list
 end
 
 function list.back(l)
@@ -21,12 +26,24 @@ function list.size(l)
 end
 
 function list.clear(l)
-	list._size = 0
+	while l._list do
+		list.erase(l)
+	end
 end
 
--- function list.insert(l, v)
--- 	l.
--- end
+function list.insert(l, v)
+	if l._list == nil then
+		l._list = {_prev = nil, _next = nil, _value = v}
+		l._back = l._list
+		l._current = l._list
+		l._size = 1
+	else
+		l._list = {_prev = nil, _next = nil, _value = v}
+		l._back = l._list
+		l._current = l._list
+		l._size = l._size + 1
+	end
+end
 
 -- function list.erase(l, v)
 -- 	l.
@@ -55,5 +72,10 @@ end
 -- reverse
 -- unique
 -- sort
+
+-- next
+-- prev
+-- get
+-- set
 
 return list
