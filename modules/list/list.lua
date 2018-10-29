@@ -1,3 +1,59 @@
 list = {}
 
+function list.new()
+	return { _front = nil, _back = nil, _current = nil, _list = nil, _size = 0 }
+end
+
+function list.front(l)
+	return l._front
+end
+
+function list.back(l)
+	return l._back
+end
+
+function list.empty(l)
+	return l._size > 0
+end
+
+function list.size(l)
+	return l._size
+end
+
+function list.clear(l)
+	list._size = 0
+end
+
+-- function list.insert(l, v)
+-- 	l.
+-- end
+
+-- function list.erase(l, v)
+-- 	l.
+-- end
+
+function list.push_back(l, v)
+	l._list = { _next = , _value = v }
+end
+
+-- front
+-- back
+-- empty
+-- size
+-- clear
+-- insert
+-- erase
+-- push_back
+-- pop_back
+-- push_front
+-- pop_front
+-- resize
+-- swap
+-- merge
+-- splice
+-- remove
+-- reverse
+-- unique
+-- sort
+
 return list
